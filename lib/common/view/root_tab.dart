@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:papar_plane/common/component/button.dart';
-import 'package:papar_plane/common/component/textformfield.dart';
+
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
+import 'package:papar_plane/user/view/mypage_screen.dart';
 
 // BottomNavigationBar 존재하는 화면
 class RootTab extends StatefulWidget {
@@ -19,8 +19,6 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   late TabController controller;
   int index = 0;
 
-  final _contt = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -32,7 +30,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.removeListener(tabListener);
+    controller.dispose();
     super.dispose();
   }
 
@@ -54,7 +52,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         children: [
           Center(child: Text("1"),),
           Center(child: Text("2"),),
-          Center(child: Text("3"),),
+          MyPageScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
