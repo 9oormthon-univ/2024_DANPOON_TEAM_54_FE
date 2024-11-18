@@ -14,5 +14,6 @@ class PaperPlaneImgPath{
   static String get uncolored_paper_plane => "assets/img/uncolored_paper_plane.png";
   static String get search => "assets/img/search.png";
   static String get reply => "assets/img/reply.png";
-
+  static String get logo => "assets/img/logo.png";
+  static String get cloud => "assets/img/cloud.png";
 }
