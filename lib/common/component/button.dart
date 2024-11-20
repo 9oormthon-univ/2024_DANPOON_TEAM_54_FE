@@ -22,6 +22,8 @@ class CustomButton extends StatelessWidget {
 
   final double verticalPadding; // 상하 padding 값
 
+  final Color? disabledBackgroundColor; // 뒷배경 Color
+
   const CustomButton({
     this.textColor,
     required this.text,
@@ -32,6 +34,7 @@ class CustomButton extends StatelessWidget {
     required this.func,
     this.verticalPadding = 15,
     super.key,
+    this.disabledBackgroundColor,
     this.size,
     this.borderRadius,
   });
@@ -43,6 +46,7 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: func,
         style: ElevatedButton.styleFrom(
+          disabledBackgroundColor: disabledBackgroundColor,
           backgroundColor: bgColor ?? PaperPlaneColor.mainColor,
           padding: EdgeInsets.symmetric(vertical: verticalPadding),
           shape: RoundedRectangleBorder(

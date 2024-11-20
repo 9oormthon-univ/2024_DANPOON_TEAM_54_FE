@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:papar_plane/common/component/button.dart';
-import 'package:papar_plane/common/component/textformfield.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
@@ -20,8 +18,6 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   late TabController controller;
   int index = 0;
 
-  final _contt = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -33,7 +29,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.removeListener(tabListener);
+    controller.dispose();
     super.dispose();
   }
 
