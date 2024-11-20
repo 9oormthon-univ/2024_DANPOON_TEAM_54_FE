@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-class PsostScreen extends StatelessWidget {
-  const PsostScreen({super.key});
+class PostScreen extends StatelessWidget {
+  const PostScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column();
+    return Column(
+      children: [],
+    );
   }
 }
