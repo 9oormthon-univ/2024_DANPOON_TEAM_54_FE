@@ -7,15 +7,35 @@ import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 
-class PostScreen extends StatelessWidget {
+class PostScreen extends StatefulWidget {
+  PostScreen({super.key});
+
+  @override
+  State<PostScreen> createState() => _PostScreenState();
+}
+
+class _PostScreenState extends State<PostScreen> {
   final _titleController = TextEditingController();
+
   final _pointController = TextEditingController();
+
   final _tagController = TextEditingController();
+
   final _descriptionController = TextEditingController();
 
-  List<String> category = ["시험/과제", "IT/트렌드", "대외 활동", "디자인", "생활/경제", "기타"];
-  PostScreen({super.key});
+  String category = "";
+
+  List<String> categoryList = [
+    "시험/과제",
+    "IT/트렌드",
+    "대외 활동",
+    "디자인",
+    "생활/경제",
+    "기타"
+  ];
+
   double sizedboxValue = 30;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -59,8 +79,8 @@ class PostScreen extends StatelessWidget {
                     // runSpacing: 5,
                     // spacing: 5,
                     children: [
-                      ...List.generate(category.length,
-                          (index) => categoryText(category[index]))
+                      ...List.generate(categoryList.length,
+                          (index) => categoryText(categoryList[index]))
                     ],
                   ),
                 ),
