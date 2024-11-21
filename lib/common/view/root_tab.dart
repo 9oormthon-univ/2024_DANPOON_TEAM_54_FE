@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
-import 'package:papar_plane/user/view/mypage_screen.dart';
+import 'package:papar_plane/home/view/home_screen.dart';
 
 // BottomNavigationBar 존재하는 화면
 class RootTab extends StatefulWidget {
@@ -50,9 +49,15 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: [
-          Center(child: Text("1"),),
-          Center(child: Text("2"),),
-          MyPageScreen(),
+          Center(
+            child: HomeScreen(),
+          ),
+          Center(
+            child: Text("2"),
+          ),
+          Center(
+            child: Text("3"),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -72,18 +77,36 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         // 바텀 네비게이션 하단바 아이콘들
         items: [
           BottomNavigationBarItem(
-            icon: Image.asset(PaperPlaneImgPath.uncolored_home, width: 25,),
-            activeIcon: Image.asset(PaperPlaneImgPath.colored_home, width: 25,),
+            icon: Image.asset(
+              PaperPlaneImgPath.uncolored_home,
+              width: 25,
+            ),
+            activeIcon: Image.asset(
+              PaperPlaneImgPath.colored_home,
+              width: 25,
+            ),
             label: '홈',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset(PaperPlaneImgPath.uncolored_paper_plane, width: 25,),
-            activeIcon: Image.asset(PaperPlaneImgPath.colored_paper_plane, width: 25,),
+            icon: Image.asset(
+              PaperPlaneImgPath.uncolored_paper_plane,
+              width: 25,
+            ),
+            activeIcon: Image.asset(
+              PaperPlaneImgPath.colored_paper_plane,
+              width: 25,
+            ),
             label: '작성',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset(PaperPlaneImgPath.uncolored_user, width: 25,),
-            activeIcon: Image.asset(PaperPlaneImgPath.colored_user, width: 25,),
+            icon: Image.asset(
+              PaperPlaneImgPath.uncolored_user,
+              width: 25,
+            ),
+            activeIcon: Image.asset(
+              PaperPlaneImgPath.colored_user,
+              width: 25,
+            ),
             label: '내정보',
           ),
         ],
