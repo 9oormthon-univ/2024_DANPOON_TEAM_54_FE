@@ -10,6 +10,45 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+
+	<!-- Image Picker를 위한 네이티브 설정 -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>해당 앱에서 갤러리에 접근하는 것을 허용하시겠습니까?</string>
+	<key>NSCameraUsageDescription</key>
+	<string>해당 앱에서 카메라에 접근하는 것을 허용하시겠습니까?</string>
+	<!-- Image Picker를 위한 네이티브 설정 -->
+
+	<!-- ios에서 카카오 로그인을 위한 설정 -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<!-- 카카오톡으로 로그인 -->
+		<string>kakaokompassauth</string>
+		<!-- 카카오톡 공유 -->
+		<string>kakaolink</string>
+		<!-- 카카오톡 채널 -->
+		<string>kakaoplus</string>
+	</array>
+	
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleURLName</key>
+		<string>com.example.paparPlane</string> <!-- ios 번들 ID를 입력 -->
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<string>kakao03e63b402420a932990ad7c17870cae1</string> <!-- 카카오 네이티브 앱 키 설정 -->
+		</array>
+	</dict>
+	</array>
+
+	<!-- url launcher -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>sms</string>
+		<string>tel</string>
+	</array>
+
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
