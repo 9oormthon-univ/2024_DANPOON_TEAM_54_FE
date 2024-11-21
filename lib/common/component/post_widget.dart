@@ -5,7 +5,7 @@ import 'package:papar_plane/common/variable/textstyle.dart';
 
 class PostWidget extends StatelessWidget {
   final String title;
-  final List<String> tags;
+  final String tags;
   final int point;
   final String category;
   final DateTime date;
@@ -21,6 +21,7 @@ class PostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tagList = tags.split(',');
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       padding: const EdgeInsets.all(10),
@@ -55,9 +56,9 @@ class PostWidget extends StatelessWidget {
                   runSpacing: 5,
                   children: [
                     ...List.generate(
-                      tags.length,
+                      tagList.length,
                       (index) => tagBox(
-                        tags[index],
+                        tagList[index],
                       ),
                     ),
                   ],

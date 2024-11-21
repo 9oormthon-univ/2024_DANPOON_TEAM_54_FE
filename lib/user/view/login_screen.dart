@@ -9,7 +9,6 @@ import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'dart:math';
-
 import 'package:papar_plane/main.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
 import 'package:papar_plane/user/view/signup_screen.dart';
@@ -96,7 +95,7 @@ class LoginScreen extends ConsumerWidget {
                 bgColor: const Color(0xFFFDE500),
                 textColor: Colors.black,
                 func: () async {
-                  await ref.read(userProvider.notifier).login();
+                  // await ref.read(userProvider.notifier).login();
                   context.pushNamed(SignupScreen.routeName);
                 },
               ),

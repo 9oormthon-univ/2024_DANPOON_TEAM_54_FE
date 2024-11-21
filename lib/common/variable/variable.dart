@@ -1,1 +1,1 @@
-final BASE_URL = "";
+final BASE_URL = "http://54.180.136.222:8080";

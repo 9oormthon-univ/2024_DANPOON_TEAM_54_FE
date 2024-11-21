@@ -29,7 +29,7 @@
 		<!-- 카카오톡 채널 -->
 		<string>kakaoplus</string>
 	</array>
-
+	
 	<key>CFBundleURLTypes</key>
 	<array>
 	<dict>
@@ -40,6 +40,13 @@
 		<string>kakao03e63b402420a932990ad7c17870cae1</string> <!-- 카카오 네이티브 앱 키 설정 -->
 		</array>
 	</dict>
+	</array>
+
+	<!-- url launcher -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>sms</string>
+		<string>tel</string>
 	</array>
 
 	<key>CFBundleInfoDictionaryVersion</key>

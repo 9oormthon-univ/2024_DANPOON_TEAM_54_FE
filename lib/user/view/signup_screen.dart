@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/component/appbar.dart';
 import 'package:papar_plane/common/component/button.dart';
@@ -10,18 +11,21 @@ import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'package:papar_plane/common/view/root_tab.dart';
 import 'package:papar_plane/main.dart';
+import 'package:papar_plane/user/provider/user_provider.dart';
+import 'package:papar_plane/user/repository/user_repository.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   static String get routeName => "signup";
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _controller = TextEditingController(); // TextField
   bool? duplicateValue; // 중복검사
+  
   
   @override
   Widget build(BuildContext context) {
@@ -45,13 +49,7 @@ class _SignupScreenState extends State<SignupScreen> {
             nicknameRow(fillColor),
             Padding(
               padding: const EdgeInsets.only(left: 19),
-              child: Text(
-                "이모지, 특수문자를 사용할 수 없습니다. (${_controller.text.length}/8)",
-                style: PaperPlaneTS.regular(
-                  fontSize: 14,
-                  color: PaperPlaneColor.greyColorA1,
-                ),
-              ),
+              child: subText(),
             ),
             const Spacer(),
             CustomButton(
@@ -69,7 +67,26 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
+  // 닉네임 입력 아래 subText
+  Text subText(){
+    String text = "이모지, 특수문자를 사용할 수 없습니다. (${_controller.text.length}/8)";
+    if(duplicateValue == true){
+      text = "사용 가능한 닉네임입니다.";
+    }
+    if(duplicateValue == false){
+      text = "중복된 닉네임입니다.";
+    }
+    return Text(
+      text,
+      style: PaperPlaneTS.regular(
+        fontSize: 14,
+        color: PaperPlaneColor.greyColorA1,
+      ),
+    );
+  }
+
   void buttonRouting() {
+    //ref.read(userRepositoryProvider).login("qoN7dMvmxsvPPvU-g-Rlg_8Xg1x0DhRa8qui2tQJIfX1KqM_CwG8kwAAAAQKKiVSAAABk02jimAicpf3YNJZ6g");
     context.goNamed(RootTab.routeName);
   }
 
@@ -86,7 +103,9 @@ class _SignupScreenState extends State<SignupScreen> {
               controller: _controller,
               hintText: "닉네임을 입력해주세요",
               onChanged: (val) {
-                setState(() {});
+                setState(() {
+                  duplicateValue = null;
+                });
               },
               suffixIcon: suffixIcon(),
             ),
@@ -100,6 +119,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   return;
                 }
                 duplicateValue = true;
+                //ref.read(userProvider.notifier).nicknameDuplicate(id: 0, nickname: _controller.text);
               });
             },
             child: Container(
