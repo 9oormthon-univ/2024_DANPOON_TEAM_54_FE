@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:papar_plane/common/component/post_widget.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'package:papar_plane/home/model/home_list_model.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<String> tabs = [
+    "전체",
+    "시험/과제",
+    "대외활동",
+    "디자인",
+    "전체1234",
+    "시험125/과2341제",
+    "대외2135활동",
+    "디자2314인"
+  ];
+
+  String tabValue = "전체";
 
   @override
   Widget build(BuildContext context) {
@@ -13,28 +32,52 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "전체",
-                ),
-                Text(
-                  "시험/과제",
-                ),
-                Text(
-                  "대외활동",
-                ),
-                Text(
-                  "IT/트렌드",
-                ),
-                Text(
-                  "디자인",
-                ),
-                Text("생활"),
-              ],
+          Container(
+            height: 20,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final tab = tabs[index];
+                if(index == 0){
+                  GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      tabValue = tab;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: tabText(tab),
+                  ),
+                );
+                }
+                if(index == tabs.length - 1){
+                  GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      tabValue = tab;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: tabText(tab),
+                  ),
+                );
+                }
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      tabValue = tab;
+                    });
+                  },
+                  child: tabText(tab),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(width: 10);
+              },
+              itemCount: tabs.length,
             ),
           ),
           Divider(),
@@ -42,12 +85,36 @@ class HomeScreen extends StatelessWidget {
             shrinkWrap: true,
             itemCount: HomeListModel.dummyHomeList.length,
             itemBuilder: (context, index) {
-              return HomeList(
-                  homeListModel: HomeListModel.dummyHomeList[index]);
+              final data = HomeListModel.dummyHomeList[index];
+              return PostWidget(
+                title: data.title,
+                tags: data.tags,
+                point: data.price,
+                category: data.category,
+                date: data.createdAt,
+              );
             },
           ),
         ],
       ),
+    );
+  }
+
+  // Tab에 들어가는 텍스트
+  // Value값에 따라서 Style이 달라집니다.
+  Text tabText(String text) {
+    if (text != tabValue) {
+      return Text(
+        text,
+        style: PaperPlaneTS.medium(
+          fontSize: 16,
+          color: PaperPlaneColor.greyColor66,
+        ),
+      );
+    }
+    return Text(
+      text,
+      style: PaperPlaneTS.medium(fontSize: 16),
     );
   }
 }
