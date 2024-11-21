@@ -9,13 +9,14 @@ class PostWidget extends StatelessWidget {
   final int point;
   final String category;
   final DateTime date;
-
+  final bool isBoder;
   const PostWidget({
     required this.title,
     required this.tags,
     required this.point,
     required this.category,
     required this.date,
+    this.isBoder = true,
     super.key,
   });
 
@@ -24,10 +25,13 @@ class PostWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(width: 0.5, color: PaperPlaneColor.greyColorD3),
-      ),
+      decoration: isBoder
+          ? BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border:
+                  Border.all(width: 0.5, color: PaperPlaneColor.greyColorD3),
+            )
+          : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
