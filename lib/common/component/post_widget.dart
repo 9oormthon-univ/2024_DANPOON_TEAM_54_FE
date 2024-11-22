@@ -5,29 +5,34 @@ import 'package:papar_plane/common/variable/textstyle.dart';
 
 class PostWidget extends StatelessWidget {
   final String title;
-  final List<String> tags;
+  final String tags;
   final int point;
   final String category;
   final DateTime date;
-
+  final bool isBoder;
   const PostWidget({
     required this.title,
     required this.tags,
     required this.point,
     required this.category,
     required this.date,
+    this.isBoder = true,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final tagList = tags.split(',');
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(width: 0.5, color: PaperPlaneColor.greyColorD3),
-      ),
+      decoration: isBoder
+          ? BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border:
+                  Border.all(width: 0.5, color: PaperPlaneColor.greyColorD3),
+            )
+          : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,9 +60,9 @@ class PostWidget extends StatelessWidget {
                   runSpacing: 5,
                   children: [
                     ...List.generate(
-                      tags.length,
+                      tagList.length,
                       (index) => tagBox(
-                        tags[index],
+                        tagList[index],
                       ),
                     ),
                   ],

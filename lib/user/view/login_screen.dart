@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/component/button.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
@@ -8,16 +9,16 @@ import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'dart:math';
-
 import 'package:papar_plane/main.dart';
+import 'package:papar_plane/user/provider/user_provider.dart';
 import 'package:papar_plane/user/view/signup_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   static String get routeName => "login";
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       child: SafeArea(
         child: Container(
@@ -93,7 +94,8 @@ class LoginScreen extends StatelessWidget {
                 borderColor: const Color(0xFFFDE500),
                 bgColor: const Color(0xFFFDE500),
                 textColor: Colors.black,
-                func: () {
+                func: () async {
+                  // await ref.read(userProvider.notifier).login();
                   context.pushNamed(SignupScreen.routeName);
                 },
               ),

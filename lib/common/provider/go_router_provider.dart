@@ -30,7 +30,7 @@ final goRouterProvider = Provider<GoRouter>(
     return GoRouter(
       routes: routes,
       // 처음으로 제공되는 화면 route
-      initialLocation: '/home',
+      initialLocation: '/login',
     );
   },
 );
