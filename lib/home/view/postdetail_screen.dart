@@ -5,7 +5,6 @@ import 'package:papar_plane/common/component/post_widget.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
-import 'package:papar_plane/home/model/home_list_model.dart';
 import 'package:papar_plane/user/component/user_image.dart';
 
 class PostDetailScreen extends StatefulWidget {
@@ -44,11 +43,11 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
           height: 50,
         ),
         PostWidget(
-          title: HomeListModel.dummyHomeList[1].title,
-          tags: HomeListModel.dummyHomeList[1].tags,
-          point: HomeListModel.dummyHomeList[1].price,
-          category: HomeListModel.dummyHomeList[1].category,
-          date: HomeListModel.dummyHomeList[1].createdAt,
+          title: 'IdeaModel.dummyHomeList[1].title',
+          tags: 'IdeaModel.dummyHomeList[1].tags',
+          point: 0,
+          category: 'IdeaModel.dummyHomeList[1].category',
+          date: DateTime.now(),
           isBoder: false,
         ),
         Row(
