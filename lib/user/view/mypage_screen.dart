@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/component/appbar.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
+import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/function.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
+import 'package:papar_plane/post/model/idea_model.dart';
 import 'package:papar_plane/user/component/user_image.dart';
+import 'package:papar_plane/user/provider/my_idea_provider.dart';
+import 'package:papar_plane/user/provider/user_provider.dart';
 
-class MyPageScreen extends StatefulWidget {
+class MyPageScreen extends ConsumerStatefulWidget {
   static String get routeName => "mypage";
   const MyPageScreen({super.key});
 
   @override
-  State<MyPageScreen> createState() => _MyPageScreenState();
+  ConsumerState<MyPageScreen> createState() => _MyPageScreenState();
 }
 
-class _MyPageScreenState extends State<MyPageScreen>
+class _MyPageScreenState extends ConsumerState<MyPageScreen>
     with SingleTickerProviderStateMixin {
   late TabController _controller;
 
   @override
   void initState() {
+    final username = ref.read(userProvider.notifier).getUser().profile.username;
     _controller = TabController(length: 2, vsync: this);
+    ref.read(myIdeaProvider.notifier).getData(username);
     super.initState();
   }
 
@@ -31,10 +38,19 @@ class _MyPageScreenState extends State<MyPageScreen>
     super.dispose();
   }
 
-  List<String> data = ["마케팅", "가톨릭대", "레포트", "마케팅", "가톨릭대", "레포트"];
+  List<String> tags = ["마케팅", "가톨릭대", "레포트", "마케팅", "가톨릭대", "레포트"];
 
   @override
   Widget build(BuildContext context) {
+    final profile = ref.read(userProvider.notifier).getUser();
+    final state = ref.watch(myIdeaProvider);
+    if(state is LoadingState){
+      return Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),);
+    }
+    if(state is ErrorState){
+      return Center(child: Text(state.msg));
+    }
+    final dataList = (state as IdeaModelList).data;
     return DefaultLayout(
       appBar: CustomAppBar.noLeadingAppBar(
         context,
@@ -50,18 +66,17 @@ class _MyPageScreenState extends State<MyPageScreen>
       child: Column(
         children: [
           userProfile(
-            nickname: "페이퍼플레인",
-            imgUrl:
-                "https://cdn.imweb.me/upload/S20210807d1f68b7a970c2/7170113c6a983.jpg",
+            nickname: profile.profile.username,
+            imgUrl: profile.profile.profileImage,
           ),
-          pointBox(1000),
+          pointBox(profile.profile.points),
           mypageTabBar(),
           Expanded(
             child: TabBarView(
               controller: _controller,
               children: [
-                TabBarViewWidget(),
-                TabBarViewWidget(),
+                TabBarViewWidget(dataList),
+                TabBarViewWidget(dataList),
               ],
             ),
           )
@@ -72,43 +87,44 @@ class _MyPageScreenState extends State<MyPageScreen>
 
   // TabBarView에 나타나는 위젯 함수
   // 추후 변수로 넣는 data에 따라 달라지도록 구현할 예정
-  Widget TabBarViewWidget() {
+  Widget TabBarViewWidget(List<IdeaModel> dataList) {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: data.length,
+      itemCount: dataList.length,
       itemBuilder: (context, index) {
+        final data = dataList[index];
         // 첫 인덱스시, 간격 추가
         if (index == 0) {
           return Padding(
             padding: const EdgeInsets.only(top: 10),
             child: historyListWidget(
-              title: "4P 마케팅 레포트 과제",
-              tags: data,
-              point: 1000,
-              category: "시험/과제",
-              date: DateTime.now(),
+              title: data.title,
+              tags: (data.tags).split(','),
+              point: data.price,
+              category: data.category,
+              date: data.createdAt,
             ),
           );
         }
         // 마지막 인덱스시, 간격 추가
-        if (index == data.length - 1) {
+        if (index == dataList.length - 1) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: historyListWidget(
-              title: "4P 마케팅 레포트 과제",
-              tags: data,
-              point: 1000,
-              category: "시험/과제",
-              date: DateTime.now(),
+              title: data.title,
+              tags: (data.tags).split(','),
+              point: data.price,
+              category: data.category,
+              date: data.createdAt,
             ),
           );
         }
         return historyListWidget(
-          title: "4P 마케팅 레포트 과제",
-          tags: data,
-          point: 1000,
-          category: "시험/과제",
-          date: DateTime.now(),
+          title: data.title,
+              tags: (data.tags).split(','),
+              point: data.price,
+              category: data.category,
+              date: data.createdAt,
         );
       },
     );

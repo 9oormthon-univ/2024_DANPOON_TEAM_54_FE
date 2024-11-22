@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/provider/dio_provider.dart';
 import 'package:papar_plane/common/variable/variable.dart';
-import 'package:papar_plane/home/model/idea_model.dart';
+import 'package:papar_plane/post/model/idea_model.dart';
+import 'package:papar_plane/post/model/write_model.dart';
 
 final ideaRepositoryProvider = Provider((ref) {
   final baseUrl = BASE_URL + '/ideas';
@@ -24,17 +25,10 @@ class IdeaRepository {
       final resp = await dio.get(
       baseUrl + '/all',
     );
-    print("아이디어 데이터 가져오기");
-    print("resp.statusCode : ${resp.statusCode}");
-    print("resp.data : ${resp.data}");
     final data = {"data" : resp.data};
     return IdeaModelList.fromJson(data);
     }on DioException catch(e){
-      print(e.error);
-      print(e.message);
-      print(e.requestOptions);
-      print(e.response);
-      return ErrorState(msg: "에러가 발생하였습니다.");
+      return ErrorState(msg: "에러가 발생하였습니다. ${e}");
     }
   }
 
@@ -45,17 +39,50 @@ class IdeaRepository {
       baseUrl + '/category',
       queryParameters: {"category" : category}
     );
-    print("카테고리별 아이디어 데이터 가져오기");
-    print("resp.statusCode : ${resp.statusCode}");
-    print("resp.data : ${resp.data}");
     final data = {"data" : resp.data};
     return IdeaModelList.fromJson(data);
     }on DioException catch(e){
-      print(e.error);
-      print(e.message);
-      print(e.requestOptions);
-      print(e.response);
       return ErrorState(msg: "에러가 발생하였습니다.");
+    }
+  }
+
+  // 아이디어 상세 조회
+  Future<IdeaDetail?> getDetail({
+    required int id,
+    required int userId,
+  }) async {
+    try{
+      final resp = await dio.get(
+      baseUrl + '/$id',
+      queryParameters: {"userId" : userId}
+    );
+    final data = {"data" : resp.data};
+    return IdeaDetail.fromJson(data);
+    }on DioException catch(e){
+      return null;
+    }
+  }
+
+  // 글 작성
+  Future<IdeaDetail?> write({
+    required WriteModel model,
+    required int userId,
+  }) async {
+    try{
+      final resp = await dio.post(
+      baseUrl + '/create',
+      queryParameters: {"userId" : userId},
+      data: model.toJson(),
+    );
+    print("글 작성하기");
+    print("resp.statusCode : ${resp.statusCode}");
+    print("resp.data : ${resp.data}");
+    return IdeaDetail.fromJson(resp.data);
+    }on DioException catch(e){
+      print(e.message);
+      print(e.response);
+      print(e);
+      return null;
     }
   }
 }

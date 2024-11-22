@@ -95,8 +95,7 @@ class LoginScreen extends ConsumerWidget {
                 bgColor: const Color(0xFFFDE500),
                 textColor: Colors.black,
                 func: () async {
-                  // await ref.read(userProvider.notifier).login();
-                  context.pushNamed(SignupScreen.routeName);
+                  await ref.read(userProvider.notifier).login();
                 },
               ),
               SizedBox(height: ratio.height * 70),

@@ -19,13 +19,22 @@ Map<String, dynamic> _$SignupUserToJson(SignupUser instance) =>
 
 PPUser _$PPUserFromJson(Map<String, dynamic> json) => PPUser(
       id: (json['id'] as num).toInt(),
+      profile: ProFileData.fromJson(json['profile'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$PPUserToJson(PPUser instance) => <String, dynamic>{
+      'id': instance.id,
+      'profile': instance.profile,
+    };
+
+ProFileData _$ProFileDataFromJson(Map<String, dynamic> json) => ProFileData(
       username: json['username'] as String,
       points: (json['points'] as num).toInt(),
       profileImage: json['profileImage'] as String?,
     );
 
-Map<String, dynamic> _$PPUserToJson(PPUser instance) => <String, dynamic>{
-      'id': instance.id,
+Map<String, dynamic> _$ProFileDataToJson(ProFileData instance) =>
+    <String, dynamic>{
       'username': instance.username,
       'profileImage': instance.profileImage,
       'points': instance.points,

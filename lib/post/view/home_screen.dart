@@ -2,14 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/component/post_widget.dart';
 import 'package:papar_plane/common/component/textformfield.dart';
 import 'package:papar_plane/common/model/state_model.dart';
+import 'package:papar_plane/common/variable/category.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
-import 'package:papar_plane/home/model/idea_model.dart';
-import 'package:papar_plane/home/provider/idea_provider.dart';
+import 'package:papar_plane/post/model/idea_model.dart';
+import 'package:papar_plane/post/provider/idea_provider.dart';
+import 'package:papar_plane/user/view/signup_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
@@ -20,13 +23,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   TextEditingController _controller = TextEditingController();
-  List<String> tabs = [
-    "전체",
-    "대외활동",
-    "디자인",
-    "IT/트렌드",
-    "기타",
-  ];
 
   @override
   void initState() {
@@ -99,7 +95,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 const SizedBox(width: 5),
                 GestureDetector(
-                  onTap: (){},
+                  onTap: (){
+                    context.pushNamed(SignupScreen.routeName);
+                  },
                   child: Icon(
                     Icons.search,
                     color: PaperPlaneColor.mainColor,
@@ -119,7 +117,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          final tab = tabs[index];
+          final tab = category[index];
           if (index == 0) {
             return GestureDetector(
               onTap: () {
@@ -133,7 +131,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             );
           }
-          if (index == tabs.length - 1) {
+          if (index == category.length - 1) {
             return GestureDetector(
               onTap: () {
                 setState(() {
@@ -158,7 +156,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         separatorBuilder: (context, index) {
           return const SizedBox(width: 20);
         },
-        itemCount: tabs.length,
+        itemCount: category.length,
       ),
     );
   }
@@ -179,21 +177,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       text,
       style: PaperPlaneTS.medium(fontSize: 16),
     );
-  }
-
-  // 서버로 보낼 카테고리 String 반환
-  String getCategoryString(String category){
-    switch(category){
-      case "전체":
-        return "전체";
-      case "대외활동":
-        return "JOB_ACTIVITY";
-      case "IT/트렌드":
-        return "IT_TREND";
-      case "디자인":
-        return "DESIGN_TEMPLATE";
-      default:
-        return "OTHERS";
-    }
   }
 }

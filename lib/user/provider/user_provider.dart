@@ -23,7 +23,7 @@ class UserNotifier extends StateNotifier<BaseState?> {
     required this.userRepo,
     required this.authRepo,
     required this.storage,
-  }):super(LoadingState());
+  }):super(null);
 
   // 닉네임 중복 검사
   Future<bool?> nicknameDuplicate({
@@ -46,25 +46,40 @@ class UserNotifier extends StateNotifier<BaseState?> {
       state = null;
       return;
     }
+    state = LoadingState();
     // paper_plane login
-    final user = await userRepo.login(kakaoData);
-    if(user == null){
+    final loginData = await userRepo.login(kakaoData);
+    if(loginData == null){
       state = null;
       return;
     }
-    if(user.isFirstLogin){
-      await storage.write(key: ACCESS_TOKEN, value: user.accessToken);
-      state = SignupUser(id: 1);
+    final id = loginData.userId;
+    if(loginData.isFirstLogin){
+      state = SignupUser(id: id);
       return;
     }
+    final profile = await userRepo.getProfile(id: id);
+    if(profile == null){
+      state = null;
+      return;
+    }
+    final user = PPUser(id: id, profile: profile);
     state = user;
-    print("now State : ${state}");
+    //state = SignupUser(id: 3797922970);
   }
 
   // 로그아웃
   // 카카오 로그아웃 후 추가 로그아웃
   void logout() async {
     authRepo.kakaoLogout();
+    state = null;
+  }
+
+  PPUser getUser(){
+    return (state as PPUser);
+  }
+
+  void reset(){
     state = null;
   }
   

@@ -7,16 +7,14 @@ part of 'auth_model.dart';
 // **************************************************************************
 
 LoginModel _$LoginModelFromJson(Map<String, dynamic> json) => LoginModel(
-      id: (json['id'] as num).toInt(),
+      userId: (json['userId'] as num).toInt(),
       isFirstLogin: json['isFirstLogin'] as bool,
-      accessToken: json['accessToken'] as String,
     );
 
 Map<String, dynamic> _$LoginModelToJson(LoginModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'userId': instance.userId,
       'isFirstLogin': instance.isFirstLogin,
-      'accessToken': instance.accessToken,
     };
 
 kakaoData _$kakaoDataFromJson(Map<String, dynamic> json) => kakaoData(

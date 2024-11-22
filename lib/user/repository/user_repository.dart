@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/provider/dio_provider.dart';
 import 'package:papar_plane/common/variable/variable.dart';
+import 'package:papar_plane/post/model/idea_model.dart';
 import 'package:papar_plane/user/model/auth_model.dart';
 import 'package:papar_plane/user/model/user_model.dart';
 
@@ -22,19 +23,13 @@ class UserRepository {
   // 서버 통신을 이용한 로그인
   Future<LoginModel?> login(kakaoData data) async {
     try{
-      final resp = await dio.get(
-      baseUrl + '/user/kakao',
+      final resp = await dio.post(
+      baseUrl + '/users/kakao',
       data: data.toJson(),
     );
-    print("서버 로그인 통신");
-    print("resp.statusCode : ${resp.statusCode}");
-    print("resp.data : ${resp.data}");
+
     return LoginModel.fromJson(resp.data);
     }on DioException catch(e){
-      print(e.error);
-      print(e.message);
-      print(e.requestOptions);
-      print(e.response);
       return null;
     }
   }
@@ -49,6 +44,8 @@ class UserRepository {
       baseUrl + '/users/$id/username',
       queryParameters: {"newUsername": nickname},
     );
+    print("resp.statusCode : ${resp.statusCode}");
+    print("resp.data : ${resp.data}");
 
     return resp.data is String;
     }catch(e){
@@ -58,18 +55,35 @@ class UserRepository {
   }
 
   // 유저 프로필 가져오기
-  Future<BaseState> getProfile({
+  Future<ProFileData?> getProfile({
     required int id,
   }) async {
     try{
       final resp = await dio.get(
       baseUrl + '/users/$id/profile',
     );
+    print("resp.data : ${resp.data}");
 
-    return PPUser.fromJson(resp.data);
+    return ProFileData.fromJson(resp.data);
     }catch(e){
-      print(e);
-      return ErrorState(msg: "에러 발생");
+      return null;
+    }
+  }
+
+  // 유저 idea 가져오기
+  Future<BaseState> getIdeas({
+    required String username,
+  }) async {
+    try{
+      final resp = await dio.get(
+      baseUrl + '/ideas/user/$username',
+    );
+    print("특정 유저의 idea");
+    print("resp.data : ${resp.data}");
+    final data = {"data" : resp.data};
+    return IdeaModelList.fromJson(data);
+    }catch(e){
+      return ErrorState(msg: "에러가 발생했습니다.");
     }
   }
 }

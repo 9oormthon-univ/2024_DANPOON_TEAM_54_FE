@@ -30,9 +30,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     // textformfield의 배경색상 변수
+    final userId = ref.read(userProvider.notifier).getUserId();
     Color? fillColor = duplicateValue == true ? PaperPlaneColor.mainColor.withOpacity(0.1) : duplicateValue == false ? PaperPlaneColor.redColorEE.withOpacity(0.1) : null;
     return DefaultLayout(
-      appBar: CustomAppBar.noActionAppBar(context, title: "회원가입"),
+      appBar: CustomAppBar.noActionAppBar(context, title: "회원가입", func: (){
+        ref.read(userProvider.notifier).reset();
+      }),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -46,7 +49,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 color: PaperPlaneColor.subColor4D,
               ),
             ),
-            nicknameRow(fillColor),
+            nicknameRow(fillColor, userId: userId),
             Padding(
               padding: const EdgeInsets.only(left: 19),
               child: subText(),
@@ -91,7 +94,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 
   // 닉네임 입력 및 중복 검사 버튼이 있는 Row
-  Padding nicknameRow(Color? fillColor) {
+  Padding nicknameRow(Color? fillColor,{
+    required int userId,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 5),
       child: Row(
@@ -114,12 +119,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           GestureDetector(
             onTap: () {
               setState(() {
-                if(_controller.text == "1234"){
-                  duplicateValue = false;
-                  return;
-                }
-                duplicateValue = true;
-                //ref.read(userProvider.notifier).nicknameDuplicate(id: 0, nickname: _controller.text);
+                ref.read(userProvider.notifier).nicknameDuplicate(id: userId, nickname: _controller.text);
               });
             },
             child: Container(
