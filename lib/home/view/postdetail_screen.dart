@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:papar_plane/common/component/post_widget.dart';
@@ -7,6 +8,7 @@ import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'package:papar_plane/home/model/home_list_model.dart';
 import 'package:papar_plane/home/view/home_screen.dart';
+import 'package:papar_plane/user/component/user_image.dart';
 
 class PostDetailScreen extends StatefulWidget {
   PostDetailScreen({super.key});
@@ -90,12 +92,23 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
         ),
       );
     } else if (tabValue == "후기") {
-      return Center(
-        child: Text(
-          "후기 콘텐츠를 여기에 추가하세요.",
-          style: PaperPlaneTS.regular(fontSize: 14),
-        ),
+      return ListView.builder(
+        itemCount: 30,
+        itemBuilder: (BuildContext context, int index) {
+          return commentBox(
+              "내용 구성도 좋고, 자료도 많아서 과제할 때 정말 유용하게 잘 참고했습니다!",
+              DateTime(2024, 11, 17, 20, 45),
+              "https://cdn.imweb.me/upload/S20210807d1f68b7a970c2/7170113c6a983.jpg",
+              "페이퍼플레인");
+        },
       );
+      // Center(
+      //   child:
+      //   Text(
+      //     "후기 콘텐츠를 여기에 추가하세요.",
+      //     style: PaperPlaneTS.regular(fontSize: 14),
+      //   ),
+      // );
     } else if (tabValue == "문의하기") {
       return Center(child: Text(" 문의 하기 "));
     } else {
@@ -103,6 +116,58 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
         child: Text("탭 콘텐츠를 준비하세요."),
       );
     }
+  }
+
+  Widget commentBox(
+      String comment, DateTime createAt, String? imgUrl, String userName) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      UserImage(
+                        size: 20,
+                        imgUrl: imgUrl,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        userName,
+                        style: PaperPlaneTS.regular(
+                            fontSize: 14, color: PaperPlaneColor.greyColorA1),
+                      ),
+                    ],
+                  ),
+                  Text("${createAt.year}.${createAt.month}.${createAt.day}",
+                      style: PaperPlaneTS.regular(
+                          fontSize: 14, color: PaperPlaneColor.greyColorA1))
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                comment,
+                style: PaperPlaneTS.regular(fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 1,
+          width: MediaQuery.of(context).size.width,
+          color: PaperPlaneColor.greyColorA1,
+        )
+      ],
+    );
   }
 
   Widget customtabbar(
