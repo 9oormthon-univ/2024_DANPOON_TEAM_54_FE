@@ -16,4 +16,6 @@ class PaperPlaneImgPath {
   static String get logo => "assets/img/logo.png";
   static String get cloud => "assets/img/cloud.png";
   static String get P_icon => "assets/img/P.png";
+  static String get edit => "assets/img/edit.png";
+  static String get chat => "assets/img/chat.png";
 }

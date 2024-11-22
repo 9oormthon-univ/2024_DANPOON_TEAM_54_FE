@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/post/repository/idea_repository.dart';
 
-final ideaDetailListProvider = StateNotifierProvider<IdeaDetailNotifier, BaseState>((ref) {
+final ideaDetailProvider = StateNotifierProvider<IdeaDetailNotifier, BaseState>((ref) {
   final repo = ref.watch(ideaRepositoryProvider);
 
   return IdeaDetailNotifier(repo: repo);

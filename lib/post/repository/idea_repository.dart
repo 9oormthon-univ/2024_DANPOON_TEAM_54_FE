@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/provider/dio_provider.dart';
 import 'package:papar_plane/common/variable/variable.dart';
+import 'package:papar_plane/post/model/comment_model.dart';
 import 'package:papar_plane/post/model/idea_model.dart';
 import 'package:papar_plane/post/model/write_model.dart';
 
@@ -56,8 +57,7 @@ class IdeaRepository {
       baseUrl + '/$id',
       queryParameters: {"userId" : userId}
     );
-    final data = {"data" : resp.data};
-    return IdeaDetail.fromJson(data);
+    return IdeaDetail.fromJson(resp.data);
     }on DioException catch(e){
       return null;
     }
@@ -82,6 +82,42 @@ class IdeaRepository {
       print(e.message);
       print(e.response);
       print(e);
+      return null;
+    }
+  }
+
+  // 댓글 조회
+  Future<BaseState> getComment({
+    required int id,
+  }) async {
+    try{
+      final resp = await dio.get(
+      baseUrl + '/$id/comments',
+    );
+    print(resp.statusCode);
+    print(resp.data);
+    final data = {"data" : resp.data};
+    return CommentList.fromJson(data);
+    }on DioException catch(e){
+      return ErrorState(msg: "에러가 발생했습니다.");
+    }
+  }
+
+  // 댓글 달기
+  Future<CommentModel?> comment({
+    required MakeComment comment,
+    required RequestComment request,
+  }) async {
+    try{
+      final resp = await dio.get(
+      baseUrl,
+      queryParameters: comment.toJson(),
+      data: request.toJson(),
+    );
+    print(resp.statusCode);
+    print(resp.data);
+    return CommentModel.fromJson(resp.data);
+    }on DioException catch(e){
       return null;
     }
   }

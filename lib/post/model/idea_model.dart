@@ -45,28 +45,26 @@ class IdeaModelList extends BaseState{
 
 @JsonSerializable()
 class IdeaDetail extends BaseState{
-  final int ideaId;
-  final String category;
+  final int id;
   final String title;
+  final String category;
   final String description;
-  final int price;
   final String tags;
-  final int views;
+  final int price;
+  final String author;
   final DateTime createdAt;
-  final DateTime updatedAt;
-  final String fileUrl;
+  final String status;
 
   IdeaDetail({
-    required this.ideaId,
+    required this.id,
     required this.category,
     required this.title,
     required this.description,
     required this.price,
     required this.tags,
-    required this.views,
+    required this.author,
     required this.createdAt,
-    required this.updatedAt,
-    required this.fileUrl,
+    required this.status,
   });
 
   // JSON 데이터를 모델 객체로 변환하는 함수

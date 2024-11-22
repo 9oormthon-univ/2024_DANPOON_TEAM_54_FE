@@ -37,28 +37,26 @@ Map<String, dynamic> _$IdeaModelListToJson(IdeaModelList instance) =>
     };
 
 IdeaDetail _$IdeaDetailFromJson(Map<String, dynamic> json) => IdeaDetail(
-      ideaId: (json['ideaId'] as num).toInt(),
+      id: (json['id'] as num).toInt(),
       category: json['category'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
       price: (json['price'] as num).toInt(),
       tags: json['tags'] as String,
-      views: (json['views'] as num).toInt(),
+      author: json['author'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      fileUrl: json['fileUrl'] as String,
+      status: json['status'] as String,
     );
 
 Map<String, dynamic> _$IdeaDetailToJson(IdeaDetail instance) =>
     <String, dynamic>{
-      'ideaId': instance.ideaId,
-      'category': instance.category,
+      'id': instance.id,
       'title': instance.title,
+      'category': instance.category,
       'description': instance.description,
-      'price': instance.price,
       'tags': instance.tags,
-      'views': instance.views,
+      'price': instance.price,
+      'author': instance.author,
       'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
-      'fileUrl': instance.fileUrl,
+      'status': instance.status,
     };

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:papar_plane/common/component/post_widget.dart';
+import 'package:papar_plane/common/component/idea_widget.dart';
 import 'package:papar_plane/common/component/textformfield.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/variable/category.dart';
@@ -12,6 +12,7 @@ import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'package:papar_plane/post/model/idea_model.dart';
 import 'package:papar_plane/post/provider/idea_provider.dart';
+import 'package:papar_plane/post/view/idea_detail_screen.dart';
 import 'package:papar_plane/user/view/signup_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -57,12 +58,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               itemCount: dataList.length,
               itemBuilder: (context, index) {
                 final data = dataList[index];
-                return PostWidget(
-                  title: data.title,
-                  tags: data.tags,
-                  point: data.price,
-                  category: data.category,
-                  date: data.createdAt,
+                return GestureDetector(
+                  onTap: (){
+                    context.pushNamed(IdeaDetailScreen.routeName, pathParameters: {"id" : (data.id).toString()});
+                  },
+                  child: IdeaWidget(
+                    title: data.title,
+                    tags: data.tags,
+                    point: data.price,
+                    category: data.category,
+                    date: data.createdAt,
+                  ),
                 );
               },
             ),

@@ -3,14 +3,14 @@ import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/function.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 
-class PostWidget extends StatelessWidget {
+class IdeaWidget extends StatelessWidget {
   final String title;
   final String tags;
   final int point;
   final String category;
   final DateTime date;
   final bool isBoder;
-  const PostWidget({
+  const IdeaWidget({
     required this.title,
     required this.tags,
     required this.point,

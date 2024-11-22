@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/view/loading_screen.dart';
 import 'package:papar_plane/common/view/root_tab.dart';
+import 'package:papar_plane/post/view/idea_detail_screen.dart';
 import 'package:papar_plane/post/view/write_screen.dart';
 import 'package:papar_plane/user/provider/auth_provider.dart';
 import 'package:papar_plane/user/view/login_screen.dart';
@@ -40,6 +41,14 @@ final goRouterProvider = Provider<GoRouter>(
         path: '/loading',
         name: LoadingScreen.routeName,
         builder: (_, __) => LoadingScreen(),
+      ),
+      GoRoute(
+        path: '/idea_detail/:id',
+        name: IdeaDetailScreen.routeName,
+        builder: (_, __) {
+          final id = int.parse(__.pathParameters["id"]!);
+          return IdeaDetailScreen(id: id);
+        },
       ),
     ];
 
