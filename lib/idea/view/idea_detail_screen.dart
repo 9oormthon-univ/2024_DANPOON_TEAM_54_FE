@@ -55,7 +55,9 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
   void initState() {
     _controller = TabController(length: 3, vsync: this);
     final userId = ref.read(userProvider.notifier).getUser().id;
-    ref.read(ideaDetailProvider.notifier).getDetail(id: widget.id, userId: userId);
+    ref
+        .read(ideaDetailProvider.notifier)
+        .getDetail(id: widget.id, userId: userId);
     ref.read(commentProvider.notifier).getComment(id: widget.id);
     ref.read(reviewProvider.notifier).getReview(id: widget.id);
     super.initState();
@@ -94,8 +96,7 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
               isBoder: false,
               isOnTapDetialScreen: false,
             ),
-            if(widget.showProfile)
-            profileBox(data.author),
+            if (widget.showProfile) profileBox(data.author),
             TabBar(
                 labelStyle: PaperPlaneTS.free(
                     fontSize: 16, fontWeight: FontWeight.w700),
@@ -142,36 +143,36 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
     );
   }
 
-  Container profileBox(String author){
+  Container profileBox(String author) {
     return Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-              decoration: BoxDecoration(
-                color: PaperPlaneColor.greyColorF6,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Row(
-                children: [
-                  const UserImage(size: 40),
-                  const SizedBox(width: 5),
-                  Expanded(
-                      child: Text(
-                    author,
-                    style: PaperPlaneTS.medium(
-                        fontSize: 16, color: PaperPlaneColor.greyColor66),
-                  )),
-                  GestureDetector(
-                      onTap: () {
-                        context.pushNamed(ProfileScreen.routeName,
-                            queryParameters: {"username": author});
-                      },
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        color: PaperPlaneColor.greyColorA1,
-                      ))
-                ],
-              ),
-            );
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      decoration: BoxDecoration(
+        color: PaperPlaneColor.greyColorF6,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        children: [
+          const UserImage(size: 40),
+          const SizedBox(width: 5),
+          Expanded(
+              child: Text(
+            author,
+            style: PaperPlaneTS.medium(
+                fontSize: 16, color: PaperPlaneColor.greyColor66),
+          )),
+          GestureDetector(
+              onTap: () {
+                context.pushNamed(ProfileScreen.routeName,
+                    queryParameters: {"username": author});
+              },
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: PaperPlaneColor.greyColorA1,
+              ))
+        ],
+      ),
+    );
   }
 
   Widget actionWidget(String status) {
@@ -227,37 +228,44 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
             child: CustomButton(
               text: buttonText,
               func: () {
-                if(buttonText == "구매하기"){
+                if (buttonText == "구매하기") {
                   CustomDialog(
                     context: context,
                     title: "구매하시겠습니까?",
                     OkText: "확인",
                     CancelText: "취소",
                     func: () {
-                      final userId = ref.read(userProvider.notifier).getUserId();
-                      ref.read(userProvider.notifier).purchase(buyerId: userId, ideaId: widget.id);
+                      final userId =
+                          ref.read(userProvider.notifier).getUserId();
+                      ref
+                          .read(userProvider.notifier)
+                          .purchase(buyerId: userId, ideaId: widget.id);
                       ref.read(userProvider.notifier).setPoint(point);
-                      ref.read(ideaDetailProvider.notifier).getDetail(id: widget.id, userId: userId);
+                      ref
+                          .read(ideaDetailProvider.notifier)
+                          .getDetail(id: widget.id, userId: userId);
                       context.pop();
                     },
                   );
                   return;
                 }
                 CustomDialog(
-                    context: context,
-                    title: "다운로드하시겠습니까?",
-                    OkText: "확인",
-                    CancelText: "취소",
-                    func: () async {
-                      final userId = ref.read(userProvider.notifier).getUserId();
-                      final fileUrl = await ref.read(ideaProvider.notifier).getFile(widget.id, userId);
-                      if(fileUrl == null){
-                        return;
-                      }
-                      _launchUrl(fileUrl);
-                      context.pop();
-                    },
-                  );
+                  context: context,
+                  title: "다운로드하시겠습니까?",
+                  OkText: "확인",
+                  CancelText: "취소",
+                  func: () async {
+                    final userId = ref.read(userProvider.notifier).getUserId();
+                    final fileUrl = await ref
+                        .read(ideaProvider.notifier)
+                        .getFile(widget.id, userId);
+                    if (fileUrl == null) {
+                      return;
+                    }
+                    _launchUrl(fileUrl);
+                    context.pop();
+                  },
+                );
               },
             ),
           )
@@ -361,9 +369,13 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
                   hintText: "댓글을 작성해주세요",
                   func: () async {
                     final userId = ref.read(userProvider.notifier).getUserId();
-                    final comment = MakeComment(ideaId: widget.id, userId: userId);
-                    final request = RequestComment(content: _commentController.text);
-                    await ref.read(commentProvider.notifier).comment(comment: comment, request: request);
+                    final comment =
+                        MakeComment(ideaId: widget.id, userId: userId);
+                    final request =
+                        RequestComment(content: _commentController.text);
+                    await ref
+                        .read(commentProvider.notifier)
+                        .comment(comment: comment, request: request);
                     _commentController.text = '';
                     context.pop();
                   });
@@ -426,12 +438,19 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
                                   controller: _cocomentController,
                                   hintText: "대댓글을 작성해주세요",
                                   func: () async {
-                                    final userId = ref.read(userProvider.notifier).getUserId();
-                                    final comment = MakeComment(ideaId: widget.id, userId: userId);
-                                    final request = RequestComment(content: _cocomentController.text,parentId: data.id);
-                                    await ref.read(commentProvider.notifier).comment(comment: comment, request: request);
+                                    final userId = ref
+                                        .read(userProvider.notifier)
+                                        .getUserId();
+                                    final comment = MakeComment(
+                                        ideaId: widget.id, userId: userId);
+                                    final request = RequestComment(
+                                        content: _cocomentController.text,
+                                        parentId: data.id);
+                                    await ref
+                                        .read(commentProvider.notifier)
+                                        .comment(
+                                            comment: comment, request: request);
                                     _cocomentController.text = '';
-                                    context.pop();
                                   });
                             },
                             child: Container(

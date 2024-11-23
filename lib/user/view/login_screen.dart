@@ -47,7 +47,7 @@ class LoginScreen extends ConsumerWidget {
                     )),
               ),
               Text(
-                "아무한테나 말 안하는 정보",
+                "대학생들을 위한 아이디어 공유 서비스",
                 style: PaperPlaneTS.medium(
                   fontSize: 18,
                   color: PaperPlaneColor.subColor8A,
