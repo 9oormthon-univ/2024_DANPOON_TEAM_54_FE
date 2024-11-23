@@ -17,12 +17,12 @@ Map<String, dynamic> _$LoginModelToJson(LoginModel instance) =>
       'isFirstLogin': instance.isFirstLogin,
     };
 
-kakaoData _$kakaoDataFromJson(Map<String, dynamic> json) => kakaoData(
+KakaoData _$KakaoDataFromJson(Map<String, dynamic> json) => KakaoData(
       kakaoId: (json['kakaoId'] as num).toInt(),
       profileImage: json['profileImage'] as String?,
     );
 
-Map<String, dynamic> _$kakaoDataToJson(kakaoData instance) => <String, dynamic>{
+Map<String, dynamic> _$KakaoDataToJson(KakaoData instance) => <String, dynamic>{
       'kakaoId': instance.kakaoId,
       'profileImage': instance.profileImage,
     };

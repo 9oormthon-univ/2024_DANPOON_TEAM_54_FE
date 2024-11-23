@@ -22,6 +22,17 @@ final goRouterProvider = Provider<GoRouter>(
         path: '/home',
         name: RootTab.routeName,
         builder: (_, __) => RootTab(),
+        routes: [
+          GoRoute(
+            path: 'idea_detail/:id',
+            name: IdeaDetailScreen.routeName,
+            builder: (_, __) {
+              final id = int.parse(__.pathParameters["id"]!);
+              final showProfile = __.uri.queryParameters["showProfile"] == null ? true : false;
+              return IdeaDetailScreen(id: id, showProfile: showProfile,);
+            },
+          ),
+        ]
       ),
       GoRoute(
         path: '/signup',
@@ -42,15 +53,6 @@ final goRouterProvider = Provider<GoRouter>(
         path: '/loading',
         name: LoadingScreen.routeName,
         builder: (_, __) => LoadingScreen(),
-      ),
-      GoRoute(
-        path: '/idea_detail/:id',
-        name: IdeaDetailScreen.routeName,
-        builder: (_, __) {
-          final id = int.parse(__.pathParameters["id"]!);
-          final showProfile = __.uri.queryParameters["showProfile"] == null ? true : false;
-          return IdeaDetailScreen(id: id, showProfile: showProfile,);
-        },
       ),
       GoRoute(
         path: '/profile',

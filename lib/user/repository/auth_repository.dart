@@ -20,7 +20,7 @@ class AuthRepository {
   AuthRepository(this.dio, {required this.baseUrl});
 
   // 카카오톡 로그인
-  Future<kakaoData?> kakaoLogin() async {
+  Future<KakaoData?> kakaoLogin() async {
     // 카카오톡 실행 가능 여부 확인
     // 카카오톡 실행이 가능하면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
     if (await isKakaoTalkInstalled()) {
@@ -28,7 +28,7 @@ class AuthRepository {
         final resp = await UserApi.instance.loginWithKakaoTalk();
         print('카카오톡으로 로그인 성공');
         User user = await UserApi.instance.me();
-        final data = kakaoData(
+        final data = KakaoData(
             kakaoId: user.id,
             profileImage: user.kakaoAccount?.profile?.profileImageUrl);
         return data;
@@ -47,7 +47,7 @@ class AuthRepository {
           print('카카오계정으로 로그인 성공');
           print("user : ${resp.toJson()}");
 
-          final data = kakaoData(
+          final data = KakaoData(
               kakaoId: user.id,
               profileImage: user.kakaoAccount?.profile?.profileImageUrl);
           return data;
@@ -63,7 +63,7 @@ class AuthRepository {
         User user = await UserApi.instance.me();
         print('카카오계정으로 로그인 성공');
         print(user.toJson());
-        final data = kakaoData(
+        final data = KakaoData(
             kakaoId: user.id,
             profileImage: user.kakaoAccount?.profile?.profileImageUrl);
         print("kakao Data : ${data.toJson()}");
@@ -75,6 +75,12 @@ class AuthRepository {
         return null;
       }
     }
+  }
+
+  Future<KakaoData> getKakaoData() async {
+    User user = await UserApi.instance.me();
+    final kakaoData = KakaoData(kakaoId: user.id, profileImage: user.kakaoAccount?.profile?.profileImageUrl);
+    return kakaoData;
   }
 
   // 카카오 로그아웃 함수

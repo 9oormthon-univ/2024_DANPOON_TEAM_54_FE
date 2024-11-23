@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/secure_storage/secure_storage.dart';
+import 'package:papar_plane/user/model/auth_model.dart';
 import 'package:papar_plane/user/model/user_model.dart';
 import 'package:papar_plane/user/repository/auth_repository.dart';
 import 'package:papar_plane/user/repository/user_repository.dart';
@@ -46,6 +47,10 @@ class UserNotifier extends StateNotifier<BaseState?> {
       state = null;
       return;
     }
+    serverLogin(kakaoData);
+  }
+
+  void serverLogin(KakaoData kakaoData) async {
     state = LoadingState();
     // paper_plane login
     final loginData = await userRepo.login(kakaoData);
@@ -65,7 +70,6 @@ class UserNotifier extends StateNotifier<BaseState?> {
     }
     final user = PPUser(id: id, profile: profile);
     state = user;
-    //state = SignupUser(id: 3797922970);
   }
 
   // 로그아웃
@@ -85,7 +89,11 @@ class UserNotifier extends StateNotifier<BaseState?> {
 
   void setPoint(int minusPoint){
     final nState = (state as PPUser);
-    state = nState.copyWith(profile: nState.profile.copyWith(points: nState.profile.points - minusPoint));
+    int newPoint = nState.profile.points - minusPoint;
+    if(newPoint < 0){
+      return;
+    }
+    state = nState.copyWith(profile: nState.profile.copyWith(points: newPoint));
   }
 
   Future<bool> purchase({

@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/user/model/user_model.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
+import 'package:papar_plane/user/repository/auth_repository.dart';
 
 final authProvider = ChangeNotifierProvider<AuthNotifier>((ref) {
   return AuthNotifier(ref: ref);
@@ -26,7 +28,7 @@ class AuthNotifier extends ChangeNotifier {
   // 유저 정보가 존재하는지 확인하고
   // 로그인 스크린으로 보내줄지
   // 홈 스크린으로 보내줄지 확인하는 과정
-  String? redirectLogic(GoRouterState gState) {
+  Future<String?> redirectLogic(GoRouterState gState) async {
     print('redirect 실행');
     final user = ref.read(userProvider);
     // 현재 넘어가는 화면에 따른 변수 설정
@@ -41,6 +43,11 @@ class AuthNotifier extends ChangeNotifier {
     if (user == null) {
       if (gState.fullPath == '/signup') {
         return '/signup';
+      }
+      final isToken = await AuthApi.instance.hasToken();
+      if(isToken){
+        final kakaoData = await ref.read(authRepositoryProvider).getKakaoData();
+        ref.read(userProvider.notifier).serverLogin(kakaoData);
       }
       return isLoggin ? null : '/login';
     }

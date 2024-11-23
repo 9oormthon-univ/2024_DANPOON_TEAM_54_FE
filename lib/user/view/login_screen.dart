@@ -11,7 +11,6 @@ import 'package:papar_plane/common/variable/textstyle.dart';
 import 'dart:math';
 import 'package:papar_plane/main.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
-import 'package:papar_plane/user/view/signup_screen.dart';
 
 class LoginScreen extends ConsumerWidget {
   static String get routeName => "login";

@@ -21,16 +21,16 @@ class LoginModel extends BaseState {
 }
 
 @JsonSerializable()
-class kakaoData extends BaseState {
+class KakaoData extends BaseState {
   final int kakaoId;
   final String? profileImage;
 
-  kakaoData({
+  KakaoData({
     required this.kakaoId,
     this.profileImage,
   });
 
-  factory kakaoData.fromJson(Map<String, dynamic> json) => _$kakaoDataFromJson(json);
+  factory KakaoData.fromJson(Map<String, dynamic> json) => _$KakaoDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$kakaoDataToJson(this);
+  Map<String, dynamic> toJson() => _$KakaoDataToJson(this);
 }
