@@ -169,28 +169,30 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
             ),
           ),
         ),
-        if(status != "OWN")
-        Positioned(
-          bottom: 20,
-          right: 0,
-          left: 0,
-          child: CustomButton(
-            text: buttonText,
-            func: () {
-              CustomDialog(
-                context: context,
-                title: "구매하시겠습니까?",
-                OkText: "확인",
-                CancelText: "취소",
-                func: () {
-                  final userId = ref.read(userProvider.notifier).getUserId();
-                  ref.read(userProvider.notifier).purchase(buyerId: userId, ideaId: widget.id);
-                  ref.read(userProvider.notifier).setPoint(point);
-                },
-              );
-            },
-          ),
-        )
+        if (status != "OWN")
+          Positioned(
+            bottom: 20,
+            right: 0,
+            left: 0,
+            child: CustomButton(
+              text: buttonText,
+              func: () {
+                CustomDialog(
+                  context: context,
+                  title: "구매하시겠습니까?",
+                  OkText: "확인",
+                  CancelText: "취소",
+                  func: () {
+                    final userId = ref.read(userProvider.notifier).getUserId();
+                    ref
+                        .read(userProvider.notifier)
+                        .purchase(buyerId: userId, ideaId: widget.id);
+                    ref.read(userProvider.notifier).setPoint(point);
+                  },
+                );
+              },
+            ),
+          )
       ],
     );
   }
@@ -234,7 +236,10 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
                   hintText: "대댓글을 입력해주세요.",
                   func: () {
                     final userId = ref.read(userProvider.notifier).getUserId();
-                    final review = MakeReview(ideaId: widget.id, userId: userId, content: _reviewController.text);
+                    final review = MakeReview(
+                        ideaId: widget.id,
+                        userId: userId,
+                        content: _reviewController.text);
                     print(review.toJson());
                     //ref.read(reviewProvider.notifier).review(review: review);
                   });
@@ -277,9 +282,13 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
                   hintText: "후기를 작성해주세요",
                   func: () {
                     final userId = ref.read(userProvider.notifier).getUserId();
-                    final comment = MakeComment(ideaId: widget.id, userId: userId);
-                    final request = RequestComment(content: _commentController.text);
-                    ref.read(commentProvider.notifier).comment(comment: comment, request: request);
+                    final comment =
+                        MakeComment(ideaId: widget.id, userId: userId);
+                    final request =
+                        RequestComment(content: _commentController.text);
+                    ref
+                        .read(commentProvider.notifier)
+                        .comment(comment: comment, request: request);
                   });
             },
             child: Container(
@@ -469,38 +478,62 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
           backgroundColor: Colors.white, // 배경색 흰색
           contentPadding: EdgeInsets.zero, // Dialog 내부 여백 제거
           content: Container(
-            width: MediaQuery.of(context).size.width * 0.9, // 화면 너비의 90%
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 1, color: PaperPlaneColor.mainColor)),
+            width: MediaQuery.of(context).size.width, // 화면 너비의 90%
             padding: EdgeInsets.all(20), // 내부 여백 추가
             child: Column(
               mainAxisSize: MainAxisSize.min, // 세로 크기 최소화
               children: [
                 CustomTextFormField(
                   controller: controller,
+                  style: PaperPlaneTS.regular(fontSize: 14),
                   hintText: hintText,
-                  maxLines: 6,
+                  fillColor: Colors.white,
+                  borderColor: Colors.white,
+                  borderRadius: 10,
+                  maxLines: 4,
+                  contentPadding: EdgeInsets.all(10),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop(); // Dialog 닫기
+                      },
+                      child: dialogButtonBox("취소", PaperPlaneColor.greyColorD3),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    GestureDetector(
+                      onTap: func,
+                      child: dialogButtonBox("완료", PaperPlaneColor.mainColor),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Dialog 닫기
-                  },
-                  child: Text('취소'),
-                ),
-                TextButton(
-                  onPressed: func,
-                  child: Text('완료'),
-                ),
-              ],
-            ),
-          ],
         );
       },
+    );
+  }
+
+  Widget dialogButtonBox(String text, Color color) {
+    return Container(
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(50), color: color),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+        child: Text(
+          text,
+          style: PaperPlaneTS.medium(fontSize: 16, color: Colors.white),
+        ),
+      ),
     );
   }
 }
