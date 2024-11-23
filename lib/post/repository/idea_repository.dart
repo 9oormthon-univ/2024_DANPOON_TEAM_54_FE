@@ -27,8 +27,11 @@ class IdeaRepository {
       baseUrl + '/all',
     );
     final data = {"data" : resp.data};
+    print("전체 데이터 조회");
+    print("전체 데이터 조회");
     return IdeaModelList.fromJson(data);
     }on DioException catch(e){
+      print(e);
       return ErrorState(msg: "에러가 발생하였습니다. ${e}");
     }
   }

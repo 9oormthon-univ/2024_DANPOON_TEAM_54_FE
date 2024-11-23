@@ -37,7 +37,7 @@ Map<String, dynamic> _$IdeaModelListToJson(IdeaModelList instance) =>
     };
 
 IdeaDetail _$IdeaDetailFromJson(Map<String, dynamic> json) => IdeaDetail(
-      id: (json['id'] as num).toInt(),
+      ideaId: (json['ideaId'] as num).toInt(),
       category: json['category'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
@@ -50,7 +50,7 @@ IdeaDetail _$IdeaDetailFromJson(Map<String, dynamic> json) => IdeaDetail(
 
 Map<String, dynamic> _$IdeaDetailToJson(IdeaDetail instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'ideaId': instance.ideaId,
       'title': instance.title,
       'category': instance.category,
       'description': instance.description,

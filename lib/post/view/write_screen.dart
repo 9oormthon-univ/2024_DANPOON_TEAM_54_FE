@@ -188,8 +188,10 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: PaperPlaneColor.whiteColorF6,
-                          borderRadius: BorderRadius.circular(20)),
+                        color: PaperPlaneColor.whiteColorF6,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      //child: Text("${selectedFile.s}"),
                     ),
                   ),
                 ],
@@ -234,8 +236,7 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
   Text subTitleText(String text) {
     return Text(
       text,
-      style:
-          PaperPlaneTS.regular(fontSize: 14, color: PaperPlaneColor.subColor8A),
+      style: PaperPlaneTS.regular(fontSize: 14, color: PaperPlaneColor.subColor8A),
     );
   }
 

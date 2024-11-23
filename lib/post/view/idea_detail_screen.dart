@@ -94,7 +94,7 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
         child: Column(
           children: [
             IdeaWidget(
-              id: data.id,
+              id: data.ideaId,
               title: data.title,
               tags: data.tags,
               point: data.price,

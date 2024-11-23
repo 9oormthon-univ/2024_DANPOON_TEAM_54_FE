@@ -46,7 +46,7 @@ class IdeaModelList extends BaseState{
 
 @JsonSerializable()
 class IdeaDetail extends BaseState{
-  final int id;
+  final int ideaId;
   final String title;
   final String category;
   final String description;
@@ -57,7 +57,7 @@ class IdeaDetail extends BaseState{
   final String status;
 
   IdeaDetail({
-    required this.id,
+    required this.ideaId,
     required this.category,
     required this.title,
     required this.description,
