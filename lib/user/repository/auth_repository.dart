@@ -84,11 +84,9 @@ class AuthRepository {
   }
 
   // 카카오 로그아웃 함수
-  Future<void> kakaoLogout() async {
+  Future<void> socialLogout() async {
     try {
-      var code = await UserApi.instance.unlink();
-      await kakaoLogout();
-      print("logout code : ${code}");
+      await UserApi.instance.unlink();
       print("카카오 로그아웃 / 연결 끊기 성공 / 토큰 삭제");
     } catch (e) {
       print(e);

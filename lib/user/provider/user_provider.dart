@@ -75,7 +75,7 @@ class UserNotifier extends StateNotifier<BaseState?> {
   // 로그아웃
   // 카카오 로그아웃 후 추가 로그아웃
   void logout() async {
-    authRepo.kakaoLogout();
+    await authRepo.socialLogout();
     state = null;
   }
 
