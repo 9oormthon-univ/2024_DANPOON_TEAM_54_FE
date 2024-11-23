@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/component/appbar.dart';
 import 'package:papar_plane/common/component/idea_widget.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
@@ -8,6 +9,7 @@ import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'package:papar_plane/idea/model/idea_model.dart';
+import 'package:papar_plane/idea/view/idea_detail_screen.dart';
 import 'package:papar_plane/user/component/user_image.dart';
 import 'package:papar_plane/user/provider/user_idea_provider.dart';
 
@@ -87,6 +89,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             point: data.price,
             category: data.category,
             date: data.createdAt,
+            onTap: () {
+              context.pushNamed(IdeaDetailScreen.routeName,
+                    pathParameters: {"id": (data.ideaId).toString()}, queryParameters: {"showProfile" : "false"});
+            },
           );
         },
       ),

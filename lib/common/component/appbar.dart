@@ -104,4 +104,28 @@ class CustomAppBar{
       ),
     );
   }
+
+  // 4. 타이틀만 필요한 경우
+  // 왼쪽, 오른쪽에 위치하는 아이콘은 제거하였습니다.
+  static AppBar noAppBar(BuildContext context,{
+    required String title,
+  }) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      centerTitle: true,
+      shape: Border(
+        bottom: BorderSide(
+          color: PaperPlaneColor.greyColorD3,
+          width: 0.5,
+        ),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
 }

@@ -48,7 +48,8 @@ final goRouterProvider = Provider<GoRouter>(
         name: IdeaDetailScreen.routeName,
         builder: (_, __) {
           final id = int.parse(__.pathParameters["id"]!);
-          return IdeaDetailScreen(id: id);
+          final showProfile = __.uri.queryParameters["showProfile"] == null ? true : false;
+          return IdeaDetailScreen(id: id, showProfile: showProfile,);
         },
       ),
       GoRoute(

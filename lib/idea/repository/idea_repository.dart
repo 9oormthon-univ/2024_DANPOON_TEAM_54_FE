@@ -27,8 +27,6 @@ class IdeaRepository {
       baseUrl + '/all',
     );
     final data = {"data" : resp.data};
-    print("전체 데이터 조회");
-    print(resp.data);
     return IdeaModelList.fromJson(data);
     }on DioException catch(e){
       print(e);
@@ -60,7 +58,7 @@ class IdeaRepository {
       baseUrl + '/$id',
       queryParameters: {"userId" : userId}
     );
-    print("상세 데이터 : ${resp.data}");
+    print(resp.data);
     return IdeaDetail.fromJson(resp.data);
     }on DioException catch(e){
       return null;
@@ -84,16 +82,8 @@ class IdeaRepository {
         },
       ),
     );
-    print("글 작성하기");
-    print("resp.statusCode : ${resp.statusCode}");
-    print("resp.data : ${resp.data}");
     return IdeaDetail.fromJson(resp.data);
     } on DioException catch(e){
-      print(e.message);
-      print(e.response);
-      print(e.error);
-      print(e.requestOptions.data);
-      print(e.type);
       return null;
     }
   }
@@ -106,8 +96,6 @@ class IdeaRepository {
       final resp = await dio.get(
       baseUrl + '/$id/comments',
     );
-    print(resp.statusCode);
-    print(resp.data);
     final data = {"data" : resp.data};
     return CommentList.fromJson(data);
     }on DioException catch(e){
@@ -121,15 +109,14 @@ class IdeaRepository {
     required RequestComment request,
   }) async {
     try{
-      final resp = await dio.get(
-      baseUrl,
+      final resp = await dio.post(
+      baseUrl + '/${comment.ideaId}/comments',
       queryParameters: comment.toJson(),
       data: request.toJson(),
     );
-    print(resp.statusCode);
-    print(resp.data);
     return CommentModel.fromJson(resp.data);
     }on DioException catch(e){
+      print(e);
       return null;
     }
   }
@@ -142,11 +129,26 @@ class IdeaRepository {
       final resp = await dio.get(
       baseUrl + '/$id',
     );
-    print(resp.statusCode);
-    print(resp.data);
-    
     }on DioException catch(e){
       print(e);
+    }
+  }
+
+    // 아이디어 상세 조회
+  Future<String?> getFile({
+    required int id,
+    required int userId,
+  }) async {
+    try{
+      final resp = await dio.get(
+      baseUrl + '/$id/download',
+      queryParameters: {"userId" : userId}
+    );
+    print(resp.statusCode);
+    print(resp.data);
+    return resp.data;
+    }on DioException catch(e){
+      return null;
     }
   }
 }

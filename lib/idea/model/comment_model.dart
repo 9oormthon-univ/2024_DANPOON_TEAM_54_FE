@@ -11,7 +11,7 @@ class CommentModel {
   final int userId;
   final String username;
   final DateTime createdAt;
-  final List<String> children;
+  final List<SubCommentModel> children;
 
   CommentModel({
     required this.id,
@@ -20,7 +20,7 @@ class CommentModel {
     required this.userId,
     required this.username,
     required this.createdAt,
-    required this.children,
+    this.children = const [],
   });
 
   factory CommentModel.fromJson(Map<String, dynamic> json) => _$CommentModelFromJson(json);
@@ -73,4 +73,26 @@ class RequestComment {
 
   factory RequestComment.fromJson(Map<String, dynamic> json) => _$RequestCommentFromJson(json);
   Map<String, dynamic> toJson() => _$RequestCommentToJson(this);
+}
+
+@JsonSerializable()
+class SubCommentModel {
+  final int id;
+  final String content;
+  final bool isAuthor;
+  final int userId;
+  final String username;
+  final DateTime createdAt;
+
+  SubCommentModel({
+    required this.id,
+    required this.content,
+    required this.isAuthor,
+    required this.userId,
+    required this.username,
+    required this.createdAt,
+  });
+
+  factory SubCommentModel.fromJson(Map<String, dynamic> json) => _$SubCommentModelFromJson(json);
+  Map<String, dynamic> toJson() => _$SubCommentModelToJson(this);
 }
