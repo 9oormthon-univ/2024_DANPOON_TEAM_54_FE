@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/component/appbar.dart';
+import 'package:papar_plane/common/component/idea_widget.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/function.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
-import 'package:papar_plane/post/model/idea_model.dart';
 import 'package:papar_plane/user/component/user_image.dart';
-import 'package:papar_plane/user/provider/my_idea_provider.dart';
+import 'package:papar_plane/user/model/purchase_model.dart';
+import 'package:papar_plane/user/provider/purchase_provider.dart';
+import 'package:papar_plane/user/provider/sells_provider.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
 
 class MyPageScreen extends ConsumerStatefulWidget {
@@ -26,9 +28,10 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
 
   @override
   void initState() {
-    final username = ref.read(userProvider.notifier).getUser().profile.username;
+    final userId = ref.read(userProvider.notifier).getUser().id;
     _controller = TabController(length: 2, vsync: this);
-    ref.read(myIdeaProvider.notifier).getData(username);
+    ref.read(mySellProvider.notifier).getData(userId);
+    ref.read(myPurchaseProvider.notifier).getData(userId);
     super.initState();
   }
 
@@ -43,14 +46,8 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   @override
   Widget build(BuildContext context) {
     final profile = ref.read(userProvider.notifier).getUser();
-    final state = ref.watch(myIdeaProvider);
-    if(state is LoadingState){
-      return Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),);
-    }
-    if(state is ErrorState){
-      return Center(child: Text(state.msg));
-    }
-    final dataList = (state as IdeaModelList).data;
+    final sell = ref.watch(mySellProvider);
+    final purchase = ref.watch(myPurchaseProvider);
     return DefaultLayout(
       appBar: CustomAppBar.noLeadingAppBar(
         context,
@@ -75,8 +72,8 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
             child: TabBarView(
               controller: _controller,
               children: [
-                TabBarViewWidget(dataList),
-                TabBarViewWidget(dataList),
+                TabBarViewWidget(sell),
+                TabBarViewWidget(purchase),
               ],
             ),
           )
@@ -87,7 +84,14 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
 
   // TabBarView에 나타나는 위젯 함수
   // 추후 변수로 넣는 data에 따라 달라지도록 구현할 예정
-  Widget TabBarViewWidget(List<IdeaModel> dataList) {
+  Widget TabBarViewWidget(BaseState state) {
+    if(state is LoadingState){
+      return Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),);
+    }
+    if(state is ErrorState){
+      return Center(child: Text(state.msg));
+    }
+    final dataList = (state as ItemList).data;
     return ListView.builder(
       shrinkWrap: true,
       itemCount: dataList.length,
@@ -97,9 +101,10 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
         if (index == 0) {
           return Padding(
             padding: const EdgeInsets.only(top: 10),
-            child: historyListWidget(
+            child: IdeaWidget(
+              id: data.id,
               title: data.title,
-              tags: (data.tags).split(','),
+              tags: data.tags,
               point: data.price,
               category: data.category,
               date: data.createdAt,
@@ -110,22 +115,24 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
         if (index == dataList.length - 1) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: historyListWidget(
+            child: IdeaWidget(
+              id: data.id,
               title: data.title,
-              tags: (data.tags).split(','),
+              tags: data.tags,
               point: data.price,
               category: data.category,
               date: data.createdAt,
             ),
           );
         }
-        return historyListWidget(
-          title: data.title,
-              tags: (data.tags).split(','),
+        return IdeaWidget(
+              id: data.id,
+              title: data.title,
+              tags: data.tags,
               point: data.price,
               category: data.category,
               date: data.createdAt,
-        );
+            );
       },
     );
   }

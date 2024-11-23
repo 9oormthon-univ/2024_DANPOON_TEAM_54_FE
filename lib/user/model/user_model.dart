@@ -37,6 +37,13 @@ class PPUser extends BaseState {
     required this.id,
     required this.profile,
   });
+
+  PPUser copyWith({
+    int? id,
+    ProFileData? profile,
+  }){
+    return PPUser(id: id ?? this.id, profile: profile ?? this.profile);
+  }
   
   factory PPUser.fromJson(Map<String, dynamic> json) => _$PPUserFromJson(json);
 
@@ -55,6 +62,14 @@ class ProFileData {
     required this.points,
     this.profileImage,
   });
+
+  ProFileData copyWith({
+    String? username,
+    String? profileImage,
+    int? points,
+  }){
+    return ProFileData(username: username ?? this.username, profileImage: profileImage ?? this.profileImage, points: points ?? this.points);
+  }
 
   factory ProFileData.fromJson(Map<String, dynamic> json) => _$ProFileDataFromJson(json);
 

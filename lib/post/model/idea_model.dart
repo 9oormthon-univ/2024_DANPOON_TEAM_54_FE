@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:papar_plane/common/model/state_model.dart';
+import 'dart:io';
 
 part 'idea_model.g.dart';
 

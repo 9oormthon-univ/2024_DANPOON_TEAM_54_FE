@@ -40,7 +40,7 @@ class ReviewRepository {
     required MakeReview review,
   }) async {
     try{
-      final resp = await dio.get(
+      final resp = await dio.post(
       baseUrl,
       queryParameters: review.toJson(),
     );
@@ -48,6 +48,9 @@ class ReviewRepository {
     print(resp.data);
     return Review.fromJson(resp.data);
     }on DioException catch(e){
+      print(e.message);
+      print(e.requestOptions);
+      print(e.response);
       return null;
     }
   }

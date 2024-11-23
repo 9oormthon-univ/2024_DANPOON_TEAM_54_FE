@@ -82,6 +82,19 @@ class UserNotifier extends StateNotifier<BaseState?> {
   void reset(){
     state = null;
   }
+
+  void setPoint(int minusPoint){
+    final nState = (state as PPUser);
+    state = nState.copyWith(profile: nState.profile.copyWith(points: nState.profile.points - minusPoint));
+  }
+
+  Future<bool> purchase({
+    required int buyerId,
+    required int ideaId,
+  }) async {
+    final resp = await userRepo.purchase(buyerId: buyerId, ideaId: ideaId);
+    return resp;
+  }
   
   // -------------------------------state 관련 함수-------------------------------
 
@@ -113,16 +126,25 @@ class UserNotifier extends StateNotifier<BaseState?> {
   // 회원가입 상태에서
   // 서버로 요청 보냈다는 가정하에,
   // 유저로 변환
-  void signup() {
+  void signup() async {
     // 회원가입 중인 유저를
     // 실 유저 객체로 변환
-    // if (state is SignupUser) {
-    //   final pState = state as SignupUser;
-    //   final user = (
-    //     nickname: pState.nickname!,
-    //   );
-    //   state = user;
-    // }
+    if (state is SignupUser) {
+      final pState = state as SignupUser;
+      state = LoadingState();
+      final id = pState.id;
+      final profile = await userRepo.getProfile(id: id);
+      if(profile == null){
+        state = ErrorState(msg: "에러가 발생하였습니다.");
+        return;
+      }
+      final user = PPUser(
+        id: id,
+        profile: profile,
+        
+      );
+      state = user;
+    }
     return;
   }
 }

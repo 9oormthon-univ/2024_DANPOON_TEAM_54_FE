@@ -89,8 +89,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 
   void buttonRouting() {
-    //ref.read(userRepositoryProvider).login("qoN7dMvmxsvPPvU-g-Rlg_8Xg1x0DhRa8qui2tQJIfX1KqM_CwG8kwAAAAQKKiVSAAABk02jimAicpf3YNJZ6g");
-    context.goNamed(RootTab.routeName);
+    ref.read(userProvider.notifier).signup();
   }
 
   // 닉네임 입력 및 중복 검사 버튼이 있는 Row
@@ -117,9 +116,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           ),
           const SizedBox(width: 5),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
+              final value = await ref.read(userProvider.notifier).nicknameDuplicate(id: userId, nickname: _controller.text);
               setState(() {
-                ref.read(userProvider.notifier).nicknameDuplicate(id: userId, nickname: _controller.text);
+                duplicateValue = value;
               });
             },
             child: Container(

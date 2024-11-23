@@ -58,17 +58,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               itemCount: dataList.length,
               itemBuilder: (context, index) {
                 final data = dataList[index];
-                return GestureDetector(
-                  onTap: (){
-                    context.pushNamed(IdeaDetailScreen.routeName, pathParameters: {"id" : (data.id).toString()});
-                  },
-                  child: IdeaWidget(
-                    title: data.title,
-                    tags: data.tags,
-                    point: data.price,
-                    category: data.category,
-                    date: data.createdAt,
-                  ),
+                return IdeaWidget(
+                  id: data.id,
+                  title: data.title,
+                  tags: data.tags,
+                  point: data.price,
+                  category: data.category,
+                  date: data.createdAt,
                 );
               },
             ),

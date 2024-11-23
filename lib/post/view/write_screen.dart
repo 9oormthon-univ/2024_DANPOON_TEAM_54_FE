@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -33,6 +36,25 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
   List<String> categoryValues = [];
 
   double sizedboxValue = 30;
+
+  File? selectedFile;
+
+  Future<void> pickFile() async {
+    // 파일 선택
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'ppt', 'pptx'], // 허용할 파일 확장자
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedFile = File(result.files.single.path!);
+      });
+    } else {
+      // 파일 선택 취소
+      print("File selection canceled");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,12 +182,15 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                        color: PaperPlaneColor.whiteColorF6,
-                        borderRadius: BorderRadius.circular(20)),
+                  GestureDetector(
+                    onTap: pickFile,
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                          color: PaperPlaneColor.whiteColorF6,
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
                   ),
                 ],
               ),
@@ -182,7 +207,7 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                     description: _descriptionController.text,
                     tags: _tagController.text,
                     price: int.parse(_pointController.text),
-                    fileUrl: '',
+                    file: selectedFile,
                   );
                   print("작성하기");
                   await ref.read(ideaProvider.notifier).write(model: model, userId: userId);

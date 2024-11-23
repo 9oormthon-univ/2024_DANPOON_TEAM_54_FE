@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/post/model/idea_model.dart';
@@ -41,6 +42,15 @@ class IdeaNotifier extends StateNotifier<BaseState> {
     required WriteModel model,
     required int userId,
   }) async {
-    final resp = await repo.write(model: model, userId: userId);
+    // FormData 생성: JSON 데이터와 파일 포함
+    final formData = FormData.fromMap({
+      ...model.toJson(), // JSON 데이터를 추가
+      if (model.file != null) // 파일이 있을 경우만 추가
+        "file": await MultipartFile.fromFile(
+          model.file!.path,
+          filename: model.file!.path.split('/').last,
+        ),
+    });
+    final resp = await repo.write(formData: formData, userId: userId);
   }
 }

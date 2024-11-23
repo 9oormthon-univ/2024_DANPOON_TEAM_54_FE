@@ -57,6 +57,7 @@ class IdeaRepository {
       baseUrl + '/$id',
       queryParameters: {"userId" : userId}
     );
+    print("상세 데이터 : ${resp.data}");
     return IdeaDetail.fromJson(resp.data);
     }on DioException catch(e){
       return null;
@@ -65,14 +66,19 @@ class IdeaRepository {
 
   // 글 작성
   Future<IdeaDetail?> write({
-    required WriteModel model,
+    required FormData formData,
     required int userId,
   }) async {
     try{
       final resp = await dio.post(
       baseUrl + '/create',
       queryParameters: {"userId" : userId},
-      data: model.toJson(),
+      data: formData,
+      options: Options(
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      ),
     );
     print("글 작성하기");
     print("resp.statusCode : ${resp.statusCode}");

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/component/appbar.dart';
+import 'package:papar_plane/common/component/button.dart';
+import 'package:papar_plane/common/component/dialog.dart';
 import 'package:papar_plane/common/component/idea_widget.dart';
 import 'package:papar_plane/common/component/textformfield.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
@@ -25,13 +27,15 @@ class IdeaDetailScreen extends ConsumerStatefulWidget {
   final int id;
   IdeaDetailScreen({
     required this.id,
-    super.key,});
+    super.key,
+  });
 
   @override
   ConsumerState<IdeaDetailScreen> createState() => _IdeaDetailScreenState();
 }
 
-class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen> with SingleTickerProviderStateMixin {
+class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _controller;
   List<String> tabcategory = ["상세정보", "후기", "문의하기"];
 
@@ -59,7 +63,9 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
   void initState() {
     _controller = TabController(length: 3, vsync: this);
     final userId = ref.read(userProvider.notifier).getUser().id;
-    ref.read(ideaDetailProvider.notifier).getDetail(id: widget.id, userId: userId);
+    ref
+        .read(ideaDetailProvider.notifier)
+        .getDetail(id: widget.id, userId: userId);
     ref.read(commentProvider.notifier).getComment(id: widget.id);
     ref.read(reviewProvider.notifier).getReview(id: widget.id);
     super.initState();
@@ -68,10 +74,15 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(ideaDetailProvider);
-    if(state is LoadingState){
-      return DefaultLayout(child: Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),));
+    if (state is LoadingState) {
+      return DefaultLayout(
+          child: Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
+        ),
+      ));
     }
-    if(state is ErrorState){
+    if (state is ErrorState) {
       return DefaultLayout(child: Center(child: Text(state.msg)));
     }
     final data = (state as IdeaDetail);
@@ -83,6 +94,7 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
         child: Column(
           children: [
             IdeaWidget(
+              id: data.id,
               title: data.title,
               tags: data.tags,
               point: data.price,
@@ -91,32 +103,42 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
               isBoder: false,
             ),
             TabBar(
-              labelStyle: PaperPlaneTS.free(fontSize: 16, fontWeight: FontWeight.w700),
-              unselectedLabelStyle: PaperPlaneTS.free(fontSize: 16, fontWeight: FontWeight.w700, color: PaperPlaneColor.greyColorA1),
-              dividerColor: PaperPlaneColor.greyColorA1,
-              // indicator style
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorWeight: 2,
-              dividerHeight: 2,
-              indicator: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: PaperPlaneColor.subColor8A, width: 2,),
+                labelStyle: PaperPlaneTS.free(
+                    fontSize: 16, fontWeight: FontWeight.w700),
+                unselectedLabelStyle: PaperPlaneTS.free(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: PaperPlaneColor.greyColorA1),
+                dividerColor: PaperPlaneColor.greyColorA1,
+                // indicator style
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorWeight: 2,
+                dividerHeight: 2,
+                indicator: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: PaperPlaneColor.subColor8A,
+                      width: 2,
+                    ),
+                  ),
+                  borderRadius: BorderRadius.circular(0),
                 ),
-                borderRadius: BorderRadius.circular(0),
-              ),
-              controller: _controller,
-              tabs: [
-              Tab(text: "상세정보"),
-              Tab(text: "후기"),
-              Tab(text: "문의하기"),
-            ]),
+                controller: _controller,
+                tabs: [
+                  const Tab(text: "상세정보"),
+                  const Tab(text: "후기"),
+                  const Tab(text: "문의하기"),
+                ]),
             Expanded(
               child: TabBarView(
                 controller: _controller,
                 children: [
-                  firstTabBarView(data.description),
-                  secondTabBarView(commentState),
-                  thirdTabBarView(reviewState),
+                  firstTabBarView(
+                      text: data.description,
+                      point: data.price,
+                      status: data.status),
+                  secondTabBarView(reviewState),
+                  thirdTabBarView(commentState),
                 ],
               ),
             ),
@@ -126,163 +148,216 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
     );
   }
 
-  Widget firstTabBarView(String text){
-    return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Text(
-            text,
-            style: PaperPlaneTS.regular(fontSize: 16),
+  Widget firstTabBarView({
+    required String text,
+    required int point,
+    required String status,
+  }) {
+    String buttonText = "구매하기";
+    if (status == "PURCHASED") {
+      buttonText = "다운로드";
+    }
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 15, bottom: 60),
+            child: Text(
+              text,
+              style: PaperPlaneTS.regular(fontSize: 16),
+            ),
           ),
         ),
-      );
-  }
-
-  Widget secondTabBarView(BaseState state){
-    if(state is LoadingState){
-      return DefaultLayout(child: Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),));
-    }
-    if(state is ErrorState){
-      return DefaultLayout(child: Center(child: Text(state.msg)));
-    }
-    final data = (state as CommentList).data;
-    return Stack(
-      children: [
-        ListView.builder(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index) {
-              final review = data[index];
-              return commentBox(review.content,
-                  review.createdAt,
-                  "https://cdn.imweb.me/upload/S20210807d1f68b7a970c2/7170113c6a983.jpg",
-                  review.username,);
-            },
-          ),
-          Positioned(
-            right: 20,
-          bottom: 50,
-            child: GestureDetector(
-              onTap: (){
-              _showDialog(controller: _commentController, hintText: "대댓글을 입력해주세요.",
-              func: (){
-                final userId = ref.read(userProvider.notifier).getUserId();
-                final comment = MakeComment(ideaId: widget.id, userId: userId);
-                final request = RequestComment(content: _commentController.text);
-                ref.read(commentProvider.notifier).comment(comment: comment, request: request);
-              });
-            },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: PaperPlaneColor.mainColor,
-                  shape: BoxShape.circle
-                ),
-                padding: const EdgeInsets.all(10),
-                child: Image.asset(PaperPlaneImgPath.edit),
-              ),
-            ),
-          )
-      ],
-    );
-  }
-
-  Widget thirdTabBarView(BaseState state){
-    if(state is LoadingState){
-      return DefaultLayout(child: Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),));
-    }
-    if(state is ErrorState){
-      return DefaultLayout(child: Center(child: Text(state.msg)));
-    }
-    final data = (state as ReviewList).data;
-    return Stack(
-      children: [
-        inquiry("몇장 분량인가요?"),
+        if(status != "OWN")
         Positioned(
-          right: 20,
-          bottom: 50,
-          child: GestureDetector(
-            onTap: (){
-              _showDialog(controller: _reviewController, hintText: "후기를 작성해주세요",
-              func: (){
-                final userId = ref.read(userProvider.notifier).getUserId();
-                final review = MakeReview(ideaId: widget.id, userId: userId, content: _reviewController.text);
-                ref.read(reviewProvider.notifier).review(review: review);
-              });
+          bottom: 20,
+          right: 0,
+          left: 0,
+          child: CustomButton(
+            text: buttonText,
+            func: () {
+              CustomDialog(
+                context: context,
+                title: "구매하시겠습니까?",
+                OkText: "확인",
+                CancelText: "취소",
+                func: () {
+                  final userId = ref.read(userProvider.notifier).getUserId();
+                  ref.read(userProvider.notifier).purchase(buyerId: userId, ideaId: widget.id);
+                  ref.read(userProvider.notifier).setPoint(point);
+                },
+              );
             },
-            child: Container(
-                decoration: BoxDecoration(
-                  color: PaperPlaneColor.mainColor,
-                  shape: BoxShape.circle
-                ),
-                padding: const EdgeInsets.all(10),
-                child: Image.asset(PaperPlaneImgPath.chat),
-              ),
           ),
         )
       ],
     );
   }
 
-  Widget inquiry(String text) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    text,
-                    style: PaperPlaneTS.regular(fontSize: 14),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    PaperPlaneImgPath.reply,
-                    width: 10,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 30,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: PaperPlaneColor.greyColorEF),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("대댓글을 입력하세요"),
-                          Image.asset(
-                            PaperPlaneImgPath.colored_paper_plane,
-                            width: 15,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
+  Widget secondTabBarView(BaseState state) {
+    if (state is LoadingState) {
+      return DefaultLayout(
+          child: Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
         ),
-        customDivider()
+      ));
+    }
+    if (state is ErrorState) {
+      return DefaultLayout(child: Center(child: Text(state.msg)));
+    }
+    final data = (state as ReviewList).data;
+    return Stack(
+      children: [
+        ListView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          itemCount: data.length,
+          itemBuilder: (BuildContext context, int index) {
+            final review = data[index];
+            return commentBox(
+              review.content,
+              review.createdAt,
+              "https://cdn.imweb.me/upload/S20210807d1f68b7a970c2/7170113c6a983.jpg",
+              review.username,
+            );
+          },
+        ),
+        Positioned(
+          right: 20,
+          bottom: 50,
+          child: GestureDetector(
+            onTap: () {
+              _showDialog(
+                  controller: _commentController,
+                  hintText: "대댓글을 입력해주세요.",
+                  func: () {
+                    final userId = ref.read(userProvider.notifier).getUserId();
+                    final review = MakeReview(ideaId: widget.id, userId: userId, content: _reviewController.text);
+                    print(review.toJson());
+                    //ref.read(reviewProvider.notifier).review(review: review);
+                  });
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  color: PaperPlaneColor.mainColor, shape: BoxShape.circle),
+              padding: const EdgeInsets.all(10),
+              child: Image.asset(PaperPlaneImgPath.edit),
+            ),
+          ),
+        )
       ],
     );
+  }
+
+  Widget thirdTabBarView(BaseState state) {
+    if (state is LoadingState) {
+      return DefaultLayout(
+          child: Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
+        ),
+      ));
+    }
+    if (state is ErrorState) {
+      return DefaultLayout(child: Center(child: Text(state.msg)));
+    }
+    final data = (state as CommentList).data;
+    return Stack(
+      children: [
+        inquiry(data),
+        Positioned(
+          right: 20,
+          bottom: 50,
+          child: GestureDetector(
+            onTap: () {
+              _showDialog(
+                  controller: _reviewController,
+                  hintText: "후기를 작성해주세요",
+                  func: () {
+                    final userId = ref.read(userProvider.notifier).getUserId();
+                    final comment = MakeComment(ideaId: widget.id, userId: userId);
+                    final request = RequestComment(content: _commentController.text);
+                    ref.read(commentProvider.notifier).comment(comment: comment, request: request);
+                  });
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  color: PaperPlaneColor.mainColor, shape: BoxShape.circle),
+              padding: const EdgeInsets.all(10),
+              child: Image.asset(PaperPlaneImgPath.chat),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget inquiry(List<CommentModel> list) {
+    return ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          final data = list[index];
+          return Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.content,
+                          style: PaperPlaneTS.regular(fontSize: 14),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          PaperPlaneImgPath.reply,
+                          width: 10,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            height: 30,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: PaperPlaneColor.greyColorEF),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("대댓글을 입력하세요"),
+                                Image.asset(
+                                  PaperPlaneImgPath.colored_paper_plane,
+                                  width: 15,
+                                  fit: BoxFit.cover,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              customDivider()
+            ],
+          );
+        });
   }
 
   Widget commentBox(
@@ -387,42 +462,45 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
     required String hintText,
     required VoidCallback func,
   }) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Colors.white, // 배경색 흰색
-        contentPadding: EdgeInsets.zero, // Dialog 내부 여백 제거
-        content: Container(
-          width: MediaQuery.of(context).size.width * 0.9, // 화면 너비의 90%
-          padding: EdgeInsets.all(20), // 내부 여백 추가
-          child: Column(
-            mainAxisSize: MainAxisSize.min, // 세로 크기 최소화
-            children: [
-              CustomTextFormField(controller: controller, hintText: hintText, maxLines: 6,),
-            ],
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white, // 배경색 흰색
+          contentPadding: EdgeInsets.zero, // Dialog 내부 여백 제거
+          content: Container(
+            width: MediaQuery.of(context).size.width * 0.9, // 화면 너비의 90%
+            padding: EdgeInsets.all(20), // 내부 여백 추가
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // 세로 크기 최소화
+              children: [
+                CustomTextFormField(
+                  controller: controller,
+                  hintText: hintText,
+                  maxLines: 6,
+                ),
+              ],
+            ),
           ),
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Dialog 닫기
-                },
-                child: Text('취소'),
-              ),
-              TextButton(
-                onPressed: func,
-                child: Text('완료'),
-              ),
-            ],
-          ),
-        ],
-      );
-    },
-  );
-}
-
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Dialog 닫기
+                  },
+                  child: Text('취소'),
+                ),
+                TextButton(
+                  onPressed: func,
+                  child: Text('완료'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
