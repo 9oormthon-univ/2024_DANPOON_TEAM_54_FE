@@ -6,7 +6,7 @@ part 'purchase_model.g.dart';
 
 @JsonSerializable()
 class ItemModel {
-  final int id;
+  final int ideaId;
   final String title;
   final String category;
   final DateTime createdAt;
@@ -14,7 +14,7 @@ class ItemModel {
   final int price;
 
   ItemModel({
-    required this.id,
+    required this.ideaId,
     required this.title,
     required this.category,
     required this.createdAt,

@@ -61,22 +61,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           customTabBar(),
           const Divider(),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(top: 10),
-              shrinkWrap: true,
-              itemCount: filteredList.length,
-              itemBuilder: (context, index) {
-                final data = filteredList[index];
-                return IdeaWidget(
-                  id: data.ideaId,
-                  title: data.title,
-                  tags: data.tags,
-                  point: data.price,
-                  category: data.category,
-                  date: data.createdAt,
-                  isOnTapDetialScreen: true,
-                );
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await ref.read(ideaProvider.notifier).getAllData();
               },
+              child: ListView.builder(
+                padding: const EdgeInsets.only(top: 10),
+                shrinkWrap: true,
+                itemCount: filteredList.length,
+                itemBuilder: (context, index) {
+                  final data = filteredList[index];
+                  return IdeaWidget(
+                    id: data.ideaId,
+                    title: data.title,
+                    tags: data.tags,
+                    point: data.price,
+                    category: data.category,
+                    date: data.createdAt,
+                    isOnTapDetialScreen: true,
+                  );
+                },
+              ),
             ),
           ),
         ],

@@ -13,8 +13,10 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
       userId: (json['userId'] as num).toInt(),
       username: json['username'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      children:
-          (json['children'] as List<dynamic>).map((e) => e as String).toList(),
+      children: (json['children'] as List<dynamic>?)
+              ?.map((e) => SubCommentModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
@@ -60,4 +62,24 @@ Map<String, dynamic> _$RequestCommentToJson(RequestComment instance) =>
     <String, dynamic>{
       'parentId': instance.parentId,
       'content': instance.content,
+    };
+
+SubCommentModel _$SubCommentModelFromJson(Map<String, dynamic> json) =>
+    SubCommentModel(
+      id: (json['id'] as num).toInt(),
+      content: json['content'] as String,
+      isAuthor: json['isAuthor'] as bool,
+      userId: (json['userId'] as num).toInt(),
+      username: json['username'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+    );
+
+Map<String, dynamic> _$SubCommentModelToJson(SubCommentModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'content': instance.content,
+      'isAuthor': instance.isAuthor,
+      'userId': instance.userId,
+      'username': instance.username,
+      'createdAt': instance.createdAt.toIso8601String(),
     };

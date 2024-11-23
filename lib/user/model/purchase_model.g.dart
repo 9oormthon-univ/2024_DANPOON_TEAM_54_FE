@@ -7,7 +7,7 @@ part of 'purchase_model.dart';
 // **************************************************************************
 
 ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
-      id: (json['id'] as num).toInt(),
+      ideaId: (json['ideaId'] as num).toInt(),
       title: json['title'] as String,
       category: json['category'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -16,7 +16,7 @@ ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
     );
 
 Map<String, dynamic> _$ItemModelToJson(ItemModel instance) => <String, dynamic>{
-      'id': instance.id,
+      'ideaId': instance.ideaId,
       'title': instance.title,
       'category': instance.category,
       'createdAt': instance.createdAt.toIso8601String(),

@@ -35,6 +35,7 @@ class IdeaNotifier extends StateNotifier<BaseState> {
 
   // 모든 데이터 가져오기
   Future<void> getAllData() async {
+    //state = LoadingState();
     final resp = await repo.getAllData();
     state = resp;
   }
@@ -50,8 +51,6 @@ class IdeaNotifier extends StateNotifier<BaseState> {
     required int userId,
     File? file,
   }) async {
-    print("now user id : ${userId}");
-    print("before formData = ${model.toJson()}");
     MultipartFile? fileData;
     if(file != null){
       fileData = await MultipartFile.fromFile(
@@ -62,9 +61,14 @@ class IdeaNotifier extends StateNotifier<BaseState> {
     // FormData 생성: JSON 데이터와 파일 포함
     final formData = FormData.fromMap({
       ...model.toJson(),
-      //"file": fileData,
+      "file": fileData,
     });
-    print("formData.fields : ${formData.fields}");
     final resp = await repo.write(formData: formData, userId: userId);
+  }
+
+  // 파일 데이터 가져오기
+  Future<String?> getFile(int id, int userId) async {
+    final resp = await repo.getFile(id: id, userId: userId);
+    return resp;
   }
 }

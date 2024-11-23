@@ -49,17 +49,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
     final sell = ref.watch(mySellProvider);
     final purchase = ref.watch(myPurchaseProvider);
     return DefaultLayout(
-      appBar: CustomAppBar.noLeadingAppBar(
-        context,
-        title: "마이페이지",
-        actions: [
-          Icon(
-            Icons.more_vert,
-            color: PaperPlaneColor.mainColor,
-          ),
-          const SizedBox(width: 5)
-        ],
-      ),
+      appBar: CustomAppBar.noAppBar(context, title: "마이페이지"),
       child: Column(
         children: [
           userProfile(
@@ -106,7 +96,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
           return Padding(
             padding: const EdgeInsets.only(top: 10),
             child: IdeaWidget(
-              id: data.id,
+              id: data.ideaId,
               title: data.title,
               tags: data.tags,
               point: data.price,
@@ -121,7 +111,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
           return Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: IdeaWidget(
-              id: data.id,
+              id: data.ideaId,
               title: data.title,
               tags: data.tags,
               point: data.price,
@@ -132,7 +122,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
           );
         }
         return IdeaWidget(
-          id: data.id,
+          id: data.ideaId,
           title: data.title,
           tags: data.tags,
           point: data.price,

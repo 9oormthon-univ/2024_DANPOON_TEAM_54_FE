@@ -25,12 +25,15 @@ import 'package:papar_plane/idea/provider/review_provider.dart';
 import 'package:papar_plane/user/component/user_image.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
 import 'package:papar_plane/user/view/profile_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class IdeaDetailScreen extends ConsumerStatefulWidget {
   static String get routeName => "detail";
   final int id;
+  final bool showProfile;
   IdeaDetailScreen({
     required this.id,
+    this.showProfile = true,
     super.key,
   });
 
@@ -45,23 +48,8 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
 
   final _commentController = TextEditingController();
   final _reviewController = TextEditingController();
+  final _cocomentController = TextEditingController();
   String tabValue = "상세정보";
-
-  String descriptions = """
-가톨릭대학교 김가대 교수님 마케팅 수업에서 과제로 제출했던 레포트입니다. 해당 과제는 주요 마케팅 전략 이론을 실제 기업 사례에 적용해 분석한 내용입니다. 참고 자료와 구체적인 예시를 포함하여 높은 평가를 받았습니다. 
-목차는 다음과 같습니다.
-
-서론 - 4P 마케팅 이론 개요 및 필요성
-기업 사례 선정 및 분석 목적
-제품(Product) 전략 분석
-가격(Price) 전략 분석
-유통(Place) 전략 분석
-촉진(Promotion) 전략 분석
-결론 및 제언
-
-A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도움이 되실 것입니다.
-
-""";
 
   @override
   void initState() {
@@ -91,9 +79,8 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
     final reviewState = ref.watch(reviewProvider);
     final commentState = ref.watch(commentProvider);
     return DefaultLayout(
-      appBar: CustomAppBar.fullAppBar(context, actions: [
-        actionWidget(state.status)
-      ], title: "게시물 상세보기"),
+      appBar: CustomAppBar.fullAppBar(context,
+          actions: [actionWidget(state.status)], title: "게시물 상세보기"),
       child: SafeArea(
         child: Column(
           children: [
@@ -107,26 +94,8 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
               isBoder: false,
               isOnTapDetialScreen: false,
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-              decoration: BoxDecoration(
-                color: PaperPlaneColor.greyColorF6,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Row(
-                children: [
-                  const UserImage(size: 40),
-                  const SizedBox(width: 5),
-                  Expanded(child: Text(data.author, style: PaperPlaneTS.medium(fontSize: 16, color: PaperPlaneColor.greyColor66),)),
-                  GestureDetector(
-                    onTap: (){
-                      context.pushNamed(ProfileScreen.routeName, queryParameters: {"username" : data.author});
-                    },
-                    child: Icon(Icons.arrow_forward_ios, color: PaperPlaneColor.greyColorA1,))
-                ],
-              ),
-            ),
+            if(widget.showProfile)
+            profileBox(data.author),
             TabBar(
                 labelStyle: PaperPlaneTS.free(
                     fontSize: 16, fontWeight: FontWeight.w700),
@@ -173,28 +142,58 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
     );
   }
 
-  Widget actionWidget(String status){
-    if(status == "OWN"){
+  Container profileBox(String author){
+    return Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              decoration: BoxDecoration(
+                color: PaperPlaneColor.greyColorF6,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  const UserImage(size: 40),
+                  const SizedBox(width: 5),
+                  Expanded(
+                      child: Text(
+                    author,
+                    style: PaperPlaneTS.medium(
+                        fontSize: 16, color: PaperPlaneColor.greyColor66),
+                  )),
+                  GestureDetector(
+                      onTap: () {
+                        context.pushNamed(ProfileScreen.routeName,
+                            queryParameters: {"username": author});
+                      },
+                      child: Icon(
+                        Icons.arrow_forward_ios,
+                        color: PaperPlaneColor.greyColorA1,
+                      ))
+                ],
+              ),
+            );
+  }
+
+  Widget actionWidget(String status) {
+    if (status == "OWN") {
       return PopupMenuButton(
-          color: Colors.white,
-          itemBuilder: (context){
+        color: Colors.white,
+        itemBuilder: (context) {
           return [
             PopupMenuItem(
               onTap: () async {
                 await ref.read(ideaProvider.notifier).delete(widget.id);
                 context.goNamed(RootTab.routeName);
               },
-              child: Text("삭제하기"),
+              child: const Text("삭제하기"),
             ),
-            PopupMenuItem(
-              onTap: (){
-
-              },
-              child: Text("수정하기"),
-            ),
+            // PopupMenuItem(
+            //   onTap: () {},
+            //   child: Text("수정하기"),
+            // ),
           ];
         },
-        );
+      );
     }
     return SizedBox();
   }
@@ -228,24 +227,48 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
             child: CustomButton(
               text: buttonText,
               func: () {
+                if(buttonText == "구매하기"){
+                  CustomDialog(
+                    context: context,
+                    title: "구매하시겠습니까?",
+                    OkText: "확인",
+                    CancelText: "취소",
+                    func: () {
+                      final userId = ref.read(userProvider.notifier).getUserId();
+                      ref.read(userProvider.notifier).purchase(buyerId: userId, ideaId: widget.id);
+                      ref.read(userProvider.notifier).setPoint(point);
+                      ref.read(ideaDetailProvider.notifier).getDetail(id: widget.id, userId: userId);
+                      context.pop();
+                    },
+                  );
+                  return;
+                }
                 CustomDialog(
-                  context: context,
-                  title: "구매하시겠습니까?",
-                  OkText: "확인",
-                  CancelText: "취소",
-                  func: () {
-                    final userId = ref.read(userProvider.notifier).getUserId();
-                    ref
-                        .read(userProvider.notifier)
-                        .purchase(buyerId: userId, ideaId: widget.id);
-                    ref.read(userProvider.notifier).setPoint(point);
-                  },
-                );
+                    context: context,
+                    title: "다운로드하시겠습니까?",
+                    OkText: "확인",
+                    CancelText: "취소",
+                    func: () async {
+                      final userId = ref.read(userProvider.notifier).getUserId();
+                      final fileUrl = await ref.read(ideaProvider.notifier).getFile(widget.id, userId);
+                      if(fileUrl == null){
+                        return;
+                      }
+                      _launchUrl(fileUrl);
+                      context.pop();
+                    },
+                  );
               },
             ),
           )
       ],
     );
+  }
+
+  Future<void> _launchUrl(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   Widget secondTabBarView(BaseState state) {
@@ -283,16 +306,21 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
           child: GestureDetector(
             onTap: () {
               _showDialog(
-                  controller: _commentController,
-                  hintText: "대댓글을 입력해주세요.",
-                  func: () {
+                  controller: _reviewController,
+                  hintText: "후기을 입력해주세요.",
+                  func: () async {
                     final userId = ref.read(userProvider.notifier).getUserId();
                     final review = MakeReview(
-                        ideaId: widget.id,
-                        userId: userId,
-                        content: _reviewController.text);
-                    print(review.toJson());
-                    //ref.read(reviewProvider.notifier).review(review: review);
+                      ideaId: widget.id,
+                      userId: userId,
+                      content: _reviewController.text,
+                    );
+
+                    await ref
+                        .read(reviewProvider.notifier)
+                        .review(review: review);
+                    _reviewController.text = '';
+                    context.pop();
                   });
             },
             child: Container(
@@ -329,17 +357,15 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
           child: GestureDetector(
             onTap: () {
               _showDialog(
-                  controller: _reviewController,
-                  hintText: "후기를 작성해주세요",
-                  func: () {
+                  controller: _commentController,
+                  hintText: "댓글을 작성해주세요",
+                  func: () async {
                     final userId = ref.read(userProvider.notifier).getUserId();
-                    final comment =
-                        MakeComment(ideaId: widget.id, userId: userId);
-                    final request =
-                        RequestComment(content: _commentController.text);
-                    ref
-                        .read(commentProvider.notifier)
-                        .comment(comment: comment, request: request);
+                    final comment = MakeComment(ideaId: widget.id, userId: userId);
+                    final request = RequestComment(content: _commentController.text);
+                    await ref.read(commentProvider.notifier).comment(comment: comment, request: request);
+                    _commentController.text = '';
+                    context.pop();
                   });
             },
             child: Container(
@@ -375,9 +401,13 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
+                    ...List.generate(data.children.length, (index) {
+                      final model = data.children[index];
+                      return subCommentWidget(data.id, model: model);
+                    }),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -390,22 +420,38 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
                           width: 10,
                         ),
                         Expanded(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            height: 30,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: PaperPlaneColor.greyColorEF),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("대댓글을 입력하세요"),
-                                Image.asset(
-                                  PaperPlaneImgPath.colored_paper_plane,
-                                  width: 15,
-                                  fit: BoxFit.cover,
-                                ),
-                              ],
+                          child: GestureDetector(
+                            onTap: () {
+                              _showDialog(
+                                  controller: _cocomentController,
+                                  hintText: "대댓글을 작성해주세요",
+                                  func: () async {
+                                    final userId = ref.read(userProvider.notifier).getUserId();
+                                    final comment = MakeComment(ideaId: widget.id, userId: userId);
+                                    final request = RequestComment(content: _cocomentController.text,parentId: data.id);
+                                    await ref.read(commentProvider.notifier).comment(comment: comment, request: request);
+                                    _cocomentController.text = '';
+                                    context.pop();
+                                  });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: PaperPlaneColor.greyColorEF),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("대댓글을 입력하세요"),
+                                  Image.asset(
+                                    PaperPlaneImgPath.colored_paper_plane,
+                                    width: 15,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         )
@@ -427,6 +473,7 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -464,6 +511,95 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
           ),
         ),
         customDivider()
+      ],
+    );
+  }
+
+  Widget subCommentWidget(
+    int parentId, {
+    SubCommentModel? model,
+  }) {
+    if (model != null) {
+      final username = model.isAuthor ? "글쓴이" : model.username;
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              PaperPlaneImgPath.reply,
+              width: 10,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              username,
+              style: PaperPlaneTS.medium(
+                fontSize: 14,
+                color: PaperPlaneColor.mainColor,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                model.content,
+                style: PaperPlaneTS.regular(fontSize: 14),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Image.asset(
+          PaperPlaneImgPath.reply,
+          width: 10,
+          fit: BoxFit.cover,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              _showDialog(
+                  controller: _cocomentController,
+                  hintText: "대댓글을 작성해주세요",
+                  func: () async {
+                    final userId = ref.read(userProvider.notifier).getUserId();
+                    final comment =
+                        MakeComment(ideaId: widget.id, userId: userId);
+                    final request = RequestComment(
+                        content: _cocomentController.text, parentId: parentId);
+                    await ref
+                        .read(commentProvider.notifier)
+                        .comment(comment: comment, request: request);
+                    _cocomentController.text = '';
+                    context.pop();
+                  });
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              height: 30,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: PaperPlaneColor.greyColorEF),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("대댓글을 입력하세요"),
+                  Image.asset(
+                    PaperPlaneImgPath.colored_paper_plane,
+                    width: 15,
+                    fit: BoxFit.cover,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

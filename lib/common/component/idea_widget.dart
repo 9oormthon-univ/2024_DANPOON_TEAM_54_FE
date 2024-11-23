@@ -15,6 +15,7 @@ class IdeaWidget extends StatelessWidget {
   final DateTime date;
   final bool isBoder;
   final bool isOnTapDetialScreen;
+  final VoidCallback? onTap;
   const IdeaWidget({
     Key? key,
     required this.title,
@@ -25,14 +26,14 @@ class IdeaWidget extends StatelessWidget {
     required this.date,
     this.isBoder = true,
     this.isOnTapDetialScreen = true,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final tagList = tags.split(',');
     return GestureDetector(
-      onTap: () {
-        print("누르기");
+      onTap: onTap ?? () {
         if (isOnTapDetialScreen) {
           context.pushNamed(IdeaDetailScreen.routeName,
               pathParameters: {"id": (id).toString()});
