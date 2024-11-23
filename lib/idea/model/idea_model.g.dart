@@ -7,7 +7,7 @@ part of 'idea_model.dart';
 // **************************************************************************
 
 IdeaModel _$IdeaModelFromJson(Map<String, dynamic> json) => IdeaModel(
-      id: (json['id'] as num).toInt(),
+      ideaId: (json['ideaId'] as num).toInt(),
       title: json['title'] as String,
       category: json['category'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -16,7 +16,7 @@ IdeaModel _$IdeaModelFromJson(Map<String, dynamic> json) => IdeaModel(
     );
 
 Map<String, dynamic> _$IdeaModelToJson(IdeaModel instance) => <String, dynamic>{
-      'id': instance.id,
+      'ideaId': instance.ideaId,
       'title': instance.title,
       'category': instance.category,
       'createdAt': instance.createdAt.toIso8601String(),

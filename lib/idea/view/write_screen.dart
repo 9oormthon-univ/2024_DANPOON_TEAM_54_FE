@@ -12,8 +12,8 @@ import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/category.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
-import 'package:papar_plane/post/model/write_model.dart';
-import 'package:papar_plane/post/provider/idea_provider.dart';
+import 'package:papar_plane/idea/model/write_model.dart';
+import 'package:papar_plane/idea/provider/idea_provider.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
 
 class WriteScreen extends ConsumerStatefulWidget {

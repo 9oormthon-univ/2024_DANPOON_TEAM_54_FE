@@ -10,8 +10,8 @@ import 'package:papar_plane/common/variable/category.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
-import 'package:papar_plane/post/model/idea_model.dart';
-import 'package:papar_plane/post/provider/idea_provider.dart';
+import 'package:papar_plane/idea/model/idea_model.dart';
+import 'package:papar_plane/idea/provider/idea_provider.dart';
 import 'package:papar_plane/user/view/signup_screen.dart';
 
 final searchQueryProvider = StateProvider<String>((ref) => '');
@@ -68,7 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               itemBuilder: (context, index) {
                 final data = filteredList[index];
                 return IdeaWidget(
-                  id: data.id,
+                  id: data.ideaId,
                   title: data.title,
                   tags: data.tags,
                   point: data.price,
@@ -116,20 +116,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 )
               ],
             ),
-          ),
-          const SizedBox(width: 5),
-          GestureDetector(
-            onTap: () {
-              context.pushNamed(SignupScreen.routeName);
-            },
-            child: Icon(
-              Icons.search,
-              color: PaperPlaneColor.mainColor,
-              size: 30,
-            ),
-          )
-        ],
-      ),
     );
   }
 

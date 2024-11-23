@@ -1,15 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/provider/dio_provider.dart';
 import 'package:papar_plane/common/variable/variable.dart';
-import 'package:papar_plane/post/model/comment_model.dart';
-import 'package:papar_plane/post/model/idea_model.dart';
-import 'package:papar_plane/post/model/write_model.dart';
+import 'package:papar_plane/idea/model/comment_model.dart';
+import 'package:papar_plane/idea/model/idea_model.dart';
 
 final ideaRepositoryProvider = Provider((ref) {
   final baseUrl = BASE_URL + '/ideas';
@@ -32,7 +28,7 @@ class IdeaRepository {
     );
     final data = {"data" : resp.data};
     print("전체 데이터 조회");
-    print("전체 데이터 조회");
+    print(resp.data);
     return IdeaModelList.fromJson(data);
     }on DioException catch(e){
       print(e);

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/function.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
-import 'package:papar_plane/post/view/idea_detail_screen.dart';
+import 'package:papar_plane/idea/view/idea_detail_screen.dart';
 
 class IdeaWidget extends StatelessWidget {
   final String title;
@@ -24,7 +24,7 @@ class IdeaWidget extends StatelessWidget {
     required this.category,
     required this.date,
     this.isBoder = true,
-    required this.isOnTapDetialScreen,
+    this.isOnTapDetialScreen = true,
   }) : super(key: key);
 
   @override

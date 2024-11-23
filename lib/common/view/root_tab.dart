@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
-import 'package:papar_plane/post/view/home_screen.dart';
-import 'package:papar_plane/post/view/write_screen.dart';
+import 'package:papar_plane/idea/view/home_screen.dart';
+import 'package:papar_plane/idea/view/write_screen.dart';
 import 'package:papar_plane/user/view/mypage_screen.dart';
 
 // BottomNavigationBar 존재하는 화면

@@ -3,9 +3,9 @@ import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
-import 'package:papar_plane/post/model/idea_model.dart';
-import 'package:papar_plane/post/model/write_model.dart';
-import 'package:papar_plane/post/repository/idea_repository.dart';
+import 'package:papar_plane/idea/model/idea_model.dart';
+import 'package:papar_plane/idea/model/write_model.dart';
+import 'package:papar_plane/idea/repository/idea_repository.dart';
 
 final ideaCategoryProvider = Provider.family<BaseState, String>((ref, category){
   final state = ref.watch(ideaProvider);

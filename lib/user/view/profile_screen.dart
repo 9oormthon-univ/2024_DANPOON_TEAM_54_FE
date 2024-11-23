@@ -7,7 +7,7 @@ import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
-import 'package:papar_plane/post/model/idea_model.dart';
+import 'package:papar_plane/idea/model/idea_model.dart';
 import 'package:papar_plane/user/component/user_image.dart';
 import 'package:papar_plane/user/provider/user_idea_provider.dart';
 
@@ -81,7 +81,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         itemBuilder: (context, index) {
           final data = dataList[index];
           return IdeaWidget(
-            id: data.id,
+            id: data.ideaId,
             title: data.title,
             tags: data.tags,
             point: data.price,

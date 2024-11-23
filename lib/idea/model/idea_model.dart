@@ -1,12 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:papar_plane/common/model/state_model.dart';
-import 'dart:io';
 
 part 'idea_model.g.dart';
 
 @JsonSerializable()
 class IdeaModel{
-  final int id;
+  final int ideaId;
   final String title;
   final String category;
   final DateTime createdAt;
@@ -14,7 +13,7 @@ class IdeaModel{
   final int price;
 
   IdeaModel({
-    required this.id,
+    required this.ideaId,
     required this.title,
     required this.category,
     required this.createdAt,

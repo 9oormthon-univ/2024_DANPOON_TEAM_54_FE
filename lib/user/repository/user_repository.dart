@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/provider/dio_provider.dart';
 import 'package:papar_plane/common/variable/variable.dart';
-import 'package:papar_plane/post/model/idea_model.dart';
+import 'package:papar_plane/idea/model/idea_model.dart';
 import 'package:papar_plane/user/model/auth_model.dart';
 import 'package:papar_plane/user/model/purchase_model.dart';
 import 'package:papar_plane/user/model/user_model.dart';

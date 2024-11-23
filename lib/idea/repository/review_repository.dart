@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/provider/dio_provider.dart';
 import 'package:papar_plane/common/variable/variable.dart';
-import 'package:papar_plane/post/model/review_model.dart';
+import 'package:papar_plane/idea/model/review_model.dart';
 
 final reviewRepository = Provider((ref) {
   final baseUrl = BASE_URL + '/reviews';

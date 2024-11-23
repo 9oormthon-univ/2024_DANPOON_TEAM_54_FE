@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
-import 'package:papar_plane/post/model/review_model.dart';
-import 'package:papar_plane/post/repository/review_repository.dart';
+import 'package:papar_plane/idea/model/review_model.dart';
+import 'package:papar_plane/idea/repository/review_repository.dart';
 
 final reviewProvider = StateNotifierProvider<ReviewNotifier, BaseState>((ref) {
   final repo = ref.watch(reviewRepository);
