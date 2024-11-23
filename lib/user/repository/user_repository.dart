@@ -22,7 +22,7 @@ class UserRepository {
   UserRepository(this.dio, {required this.baseUrl});
 
   // 서버 통신을 이용한 로그인
-  Future<LoginModel?> login(kakaoData data) async {
+  Future<LoginModel?> login(KakaoData data) async {
     try{
       final resp = await dio.post(
       baseUrl + '/users/kakao',

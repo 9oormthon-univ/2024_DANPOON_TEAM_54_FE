@@ -51,7 +51,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 const UserImage(size: 60),
                 const SizedBox(width: 5),
                 Text(
-                  "r",
+                  widget.username,
                   style: PaperPlaneTS.bold(fontSize: 20),
                 ),
               ],

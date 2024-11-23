@@ -46,7 +46,7 @@ class IdeaNotifier extends StateNotifier<BaseState> {
   }
 
   // 모든 데이터 가져오기
-  Future<void> write({
+  Future<int?> write({
     required WriteModel model,
     required int userId,
     File? file,
@@ -64,6 +64,10 @@ class IdeaNotifier extends StateNotifier<BaseState> {
       "file": fileData,
     });
     final resp = await repo.write(formData: formData, userId: userId);
+    if(resp == null){
+      return null;
+    }
+    return resp.ideaId;
   }
 
   // 파일 데이터 가져오기

@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/component/appbar.dart';
 import 'package:papar_plane/common/component/button.dart';
+import 'package:papar_plane/common/component/dialog.dart';
 import 'package:papar_plane/common/component/textformfield.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/category.dart';
@@ -14,6 +16,7 @@ import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'package:papar_plane/idea/model/write_model.dart';
 import 'package:papar_plane/idea/provider/idea_provider.dart';
+import 'package:papar_plane/idea/view/idea_detail_screen.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
 
 class WriteScreen extends ConsumerStatefulWidget {
@@ -33,19 +36,19 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
 
   final _descriptionController = TextEditingController();
 
-  List<String> categoryValues = [];
+  String categoryValues = '';
 
   double sizedboxValue = 30;
 
   File? selectedFile;
 
   Future<void> pickFile() async {
-    print("before : ${selectedFile}");
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
-      selectedFile = File(result.files.single.path!);
-      print("after : ${selectedFile}");
+      setState(() {
+        selectedFile = File(result.files.single.path!);
+      });
     } else {
       // User canceled the picker
     }
@@ -186,7 +189,9 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                         color: PaperPlaneColor.whiteColorF6,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      //child: Text("${selectedFile.s}"),
+                      child: selectedFile != null ? Center(
+                        child: Icon(Icons.circle_outlined, color: PaperPlaneColor.mainColor, size: 60,),
+                      ) : const SizedBox()
                     ),
                   ),
                 ],
@@ -205,9 +210,12 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                     tags: _tagController.text,
                     price: int.parse(_pointController.text),
                   );
-                  print("작성하기");
-                  print(model.toJson());
-                  await ref.read(ideaProvider.notifier).write(model: model, userId: userId, file: selectedFile);
+                  final id = await ref.read(ideaProvider.notifier).write(model: model, userId: userId, file: selectedFile);
+                  if(id == null){
+                    CustomDialog(context: context, title: "오류가 발생하였습니다.", OkText: "확인", func: (){context.pop();});
+                    return;
+                  }
+                  context.goNamed(IdeaDetailScreen.routeName, pathParameters: {"id" : id.toString()});
                 },
                 borderRadius: 20,
                 horizontalMargin: 0,
@@ -237,18 +245,15 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
   }
 
   GestureDetector categoryText(String text) {
-    final isContain = categoryValues.contains(text);
+    final isContain = categoryValues == text;
     return GestureDetector(
       onTap: () {
         setState(() {
           if (isContain) {
-            categoryValues.remove(text);
+            categoryValues = '';
             return;
           }
-          if (categoryValues.length == 1) {
-            return;
-          }
-          categoryValues.add(text);
+          categoryValues = text;
         });
       },
       child: Container(

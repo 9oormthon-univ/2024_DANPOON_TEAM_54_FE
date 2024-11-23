@@ -178,7 +178,7 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
     if (status == "OWN") {
       return PopupMenuButton(
         color: Colors.white,
-        itemBuilder: (context) {
+        itemBuilder: (itemContext) {
           return [
             PopupMenuItem(
               onTap: () async {
@@ -233,12 +233,12 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
                     title: "구매하시겠습니까?",
                     OkText: "확인",
                     CancelText: "취소",
-                    func: () {
+                    func: () async {
                       final userId = ref.read(userProvider.notifier).getUserId();
-                      ref.read(userProvider.notifier).purchase(buyerId: userId, ideaId: widget.id);
+                      await ref.read(userProvider.notifier).purchase(buyerId: userId, ideaId: widget.id);
                       ref.read(userProvider.notifier).setPoint(point);
-                      ref.read(ideaDetailProvider.notifier).getDetail(id: widget.id, userId: userId);
-                      context.pop();
+                      await ref.read(ideaDetailProvider.notifier).getDetail(id: widget.id, userId: userId);
+                      Navigator.of(context, rootNavigator: true).pop();
                     },
                   );
                   return;
@@ -251,11 +251,13 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
                     func: () async {
                       final userId = ref.read(userProvider.notifier).getUserId();
                       final fileUrl = await ref.read(ideaProvider.notifier).getFile(widget.id, userId);
-                      if(fileUrl == null){
+                      if(fileUrl == null || fileUrl.isEmpty){
+                        CustomDialog(context: context, title: "다운로드할 파일이 없습니다.", OkText: "확인", func: (){
+                          context.pop();
+                        });
                         return;
                       }
                       _launchUrl(fileUrl);
-                      context.pop();
                     },
                   );
               },
@@ -316,11 +318,9 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
                       content: _reviewController.text,
                     );
 
-                    await ref
-                        .read(reviewProvider.notifier)
-                        .review(review: review);
+                    await ref.read(reviewProvider.notifier).review(review: review);
                     _reviewController.text = '';
-                    context.pop();
+                    Navigator.pop(context);
                   });
             },
             child: Container(
@@ -365,7 +365,7 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
                     final request = RequestComment(content: _commentController.text);
                     await ref.read(commentProvider.notifier).comment(comment: comment, request: request);
                     _commentController.text = '';
-                    context.pop();
+                    Navigator.pop(context);
                   });
             },
             child: Container(
@@ -383,7 +383,7 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
   Widget inquiry(List<CommentModel> list) {
     return ListView.builder(
         itemCount: list.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (itemContext, index) {
           final data = list[index];
           return Column(
             children: [
@@ -577,7 +577,6 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
                         .read(commentProvider.notifier)
                         .comment(comment: comment, request: request);
                     _cocomentController.text = '';
-                    context.pop();
                   });
             },
             child: Container(

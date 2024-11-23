@@ -35,5 +35,6 @@ class ReviewNotifier extends StateNotifier<BaseState> {
     final pState = (state as ReviewList);
     final nState = pState.copyWith(data: [...pState.data, resp]);
     state = nState;
+    print("후기 업데이트 완료");
   }
 }

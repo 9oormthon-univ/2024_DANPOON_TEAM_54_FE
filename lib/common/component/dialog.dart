@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 
@@ -49,7 +50,10 @@ Future<void> CustomDialog({
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: func,
+                  onPressed: (){
+                    func;
+                    context.pop();
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 11),
                     child: Text(
