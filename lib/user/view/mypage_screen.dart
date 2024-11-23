@@ -49,7 +49,19 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
     final sell = ref.watch(mySellProvider);
     final purchase = ref.watch(myPurchaseProvider);
     return DefaultLayout(
-      appBar: CustomAppBar.noAppBar(context, title: "마이페이지"),
+      appBar: CustomAppBar.noLeadingAppBar(context, title: "마이페이지", actions: [
+        PopupMenuButton(
+          color: Colors.white,
+          itemBuilder: (context){
+          return [
+            PopupMenuItem(
+              onTap: (){
+                ref.read(userProvider.notifier).logout();
+              },
+              child: Text("로그아웃", style: PaperPlaneTS.bold(fontSize: 16),))
+          ];
+        })
+      ]),
       child: Column(
         children: [
           userProfile(
