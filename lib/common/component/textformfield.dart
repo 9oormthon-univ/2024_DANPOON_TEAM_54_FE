@@ -35,10 +35,12 @@ class CustomTextFormField extends StatelessWidget {
   final bool isDense;
   final TextAlign textAlign;
   final VoidCallback? onTap;
+  final BoxConstraints? suffixIconConstraints;
   const CustomTextFormField({
     required this.controller,
     required this.hintText,
     this.onTap,
+    this.suffixIconConstraints,
     this.borderRadius = 50,
     this.onChanged,
     this.textAlign = TextAlign.start,
@@ -81,6 +83,7 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         isDense: isDense,
+        suffixIconConstraints: suffixIconConstraints,
         fillColor: fillColor ?? PaperPlaneColor.whiteColorF6,
         filled: filled,
         errorStyle: PaperPlaneTS.medium(fontSize: 12, color: Colors.red,),

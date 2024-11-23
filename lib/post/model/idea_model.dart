@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:papar_plane/common/model/state_model.dart';
+import 'dart:io';
 
 part 'idea_model.g.dart';
 
@@ -41,4 +42,35 @@ class IdeaModelList extends BaseState{
   }
 
   factory IdeaModelList.fromJson(Map<String, dynamic> json) => _$IdeaModelListFromJson(json);
+}
+
+@JsonSerializable()
+class IdeaDetail extends BaseState{
+  final int ideaId;
+  final String title;
+  final String category;
+  final String description;
+  final String tags;
+  final int price;
+  final String author;
+  final DateTime createdAt;
+  final String status;
+
+  IdeaDetail({
+    required this.ideaId,
+    required this.category,
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.tags,
+    required this.author,
+    required this.createdAt,
+    required this.status,
+  });
+
+  // JSON 데이터를 모델 객체로 변환하는 함수
+  factory IdeaDetail.fromJson(Map<String, dynamic> json) => _$IdeaDetailFromJson(json);
+
+  // 모델 객체를 JSON 데이터로 변환하는 함수
+  Map<String, dynamic> toJson() => _$IdeaDetailToJson(this);
 }

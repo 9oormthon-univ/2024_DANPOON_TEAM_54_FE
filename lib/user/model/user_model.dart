@@ -31,77 +31,47 @@ class SignupUser extends BaseState{
 @JsonSerializable()
 class PPUser extends BaseState {
   final int id;
-  final String username;
-  final String? profileImage;
-  final int points;
-  // final Properties properties;
-  // final String connectedAt;
-  // final KakaoAccount kakaoAccount;
-  // final bool isFirstLogin;
-  // final String accessToken;
+  final ProFileData profile;
 
   PPUser({
     required this.id,
-    required this.username,
-    required this.points,
-    this.profileImage,
-    // required this.properties,
-    // required this.connectedAt,
-    // required this.kakaoAccount,
-    // required this.isFirstLogin,
-    // required this.accessToken,
+    required this.profile,
   });
 
+  PPUser copyWith({
+    int? id,
+    ProFileData? profile,
+  }){
+    return PPUser(id: id ?? this.id, profile: profile ?? this.profile);
+  }
+  
   factory PPUser.fromJson(Map<String, dynamic> json) => _$PPUserFromJson(json);
 
   Map<String, dynamic> toJson() => _$PPUserToJson(this);
 }
 
-// @JsonSerializable()
-// class Properties {
-//   final String profileImage;
-//   final String thumbnailImage;
+// 로그인시 부여받는 객체
+@JsonSerializable()
+class ProFileData {
+  final String username;
+  final String? profileImage;
+  final int points;
 
-//   Properties({
-//     required this.profileImage,
-//     required this.thumbnailImage,
-//   });
+  ProFileData({
+    required this.username,
+    required this.points,
+    this.profileImage,
+  });
 
-//   factory Properties.fromJson(Map<String, dynamic> json) => _$PropertiesFromJson(json);
+  ProFileData copyWith({
+    String? username,
+    String? profileImage,
+    int? points,
+  }){
+    return ProFileData(username: username ?? this.username, profileImage: profileImage ?? this.profileImage, points: points ?? this.points);
+  }
 
-//   Map<String, dynamic> toJson() => _$PropertiesToJson(this);
-// }
+  factory ProFileData.fromJson(Map<String, dynamic> json) => _$ProFileDataFromJson(json);
 
-// // 카카오 로그인으로부터 받아오는 데이터
-// @JsonSerializable()
-// class KakaoAccount {
-//   final Profile profile;
-//   final bool profileImageNeedsAgreement;
-
-//   KakaoAccount({
-//     required this.profile,
-//     required this.profileImageNeedsAgreement,
-//   });
-
-//   factory KakaoAccount.fromJson(Map<String, dynamic> json) => _$KakaoAccountFromJson(json);
-
-//   Map<String, dynamic> toJson() => _$KakaoAccountToJson(this);
-// }
-
-// // 카카오 로그인의 프로필 이미지 url들
-// @JsonSerializable()
-// class Profile {
-//   final String thumbnailImageUrl;
-//   final String profileImageUrl;
-//   final bool isDefaultImage;
-
-//   Profile({
-//     required this.thumbnailImageUrl,
-//     required this.profileImageUrl,
-//     required this.isDefaultImage,
-//   });
-
-//   factory Profile.fromJson(Map<String, dynamic> json) => _$ProfileFromJson(json);
-
-//   Map<String, dynamic> toJson() => _$ProfileToJson(this);
-// }
+  Map<String, dynamic> toJson() => _$ProFileDataToJson(this);
+}

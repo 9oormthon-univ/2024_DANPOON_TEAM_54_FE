@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
-import 'package:papar_plane/home/model/idea_model.dart';
-import 'package:papar_plane/home/repository/idea_repository.dart';
+import 'package:papar_plane/post/model/idea_model.dart';
+import 'package:papar_plane/post/model/write_model.dart';
+import 'package:papar_plane/post/repository/idea_repository.dart';
 
 final ideaCategoryProvider = Provider.family<BaseState, String>((ref, category){
   final state = ref.watch(ideaProvider);
@@ -33,5 +35,22 @@ class IdeaNotifier extends StateNotifier<BaseState> {
   Future<void> getAllData() async {
     final resp = await repo.getAllData();
     state = resp;
+  }
+
+  // 모든 데이터 가져오기
+  Future<void> write({
+    required WriteModel model,
+    required int userId,
+  }) async {
+    // FormData 생성: JSON 데이터와 파일 포함
+    final formData = FormData.fromMap({
+      ...model.toJson(), // JSON 데이터를 추가
+      if (model.file != null) // 파일이 있을 경우만 추가
+        "file": await MultipartFile.fromFile(
+          model.file!.path,
+          filename: model.file!.path.split('/').last,
+        ),
+    });
+    final resp = await repo.write(formData: formData, userId: userId);
   }
 }

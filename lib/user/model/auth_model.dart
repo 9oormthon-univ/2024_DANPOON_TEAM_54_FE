@@ -5,19 +5,19 @@ part 'auth_model.g.dart';
 
 @JsonSerializable()
 class LoginModel extends BaseState {
-  final int id;
+  final int userId;
   final bool isFirstLogin;
-  final String accessToken;
+  //final String accessToken;
 
   LoginModel({
-    required this.id,
+    required this.userId,
     required this.isFirstLogin,
-    required this.accessToken,
+    //required this.accessToken,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => _$LoginModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$LoginModelToJson(this);
+  Map<String, dynamic> toJson() => _$LoginModelToJson(this); 
 }
 
 @JsonSerializable()

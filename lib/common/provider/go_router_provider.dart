@@ -1,6 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:papar_plane/common/view/loading_screen.dart';
 import 'package:papar_plane/common/view/root_tab.dart';
+import 'package:papar_plane/post/view/idea_detail_screen.dart';
+import 'package:papar_plane/post/view/write_screen.dart';
+import 'package:papar_plane/user/provider/auth_provider.dart';
 import 'package:papar_plane/user/view/login_screen.dart';
 import 'package:papar_plane/user/view/signup_screen.dart';
 
@@ -8,6 +12,9 @@ import 'package:papar_plane/user/view/signup_screen.dart';
 // 해당 provider로 routing 진행
 final goRouterProvider = Provider<GoRouter>(
   (ref) {
+
+    final provider = ref.read(authProvider);
+
     // 라우팅 리스트
     List<GoRoute> routes = [
       GoRoute(
@@ -25,12 +32,34 @@ final goRouterProvider = Provider<GoRouter>(
         name: LoginScreen.routeName,
         builder: (_, __) => LoginScreen(),
       ),
+      GoRoute(
+        path: '/write',
+        name: WriteScreen.routeName,
+        builder: (_, __) => WriteScreen(),
+      ),
+      GoRoute(
+        path: '/loading',
+        name: LoadingScreen.routeName,
+        builder: (_, __) => LoadingScreen(),
+      ),
+      GoRoute(
+        path: '/idea_detail/:id',
+        name: IdeaDetailScreen.routeName,
+        builder: (_, __) {
+          final id = int.parse(__.pathParameters["id"]!);
+          return IdeaDetailScreen(id: id);
+        },
+      ),
     ];
 
     return GoRouter(
       routes: routes,
       // 처음으로 제공되는 화면 route
+      refreshListenable: provider,
       initialLocation: '/login',
+      redirect: (_, state){
+        return provider.redirectLogic(state);
+      }
     );
   },
 );

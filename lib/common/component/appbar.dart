@@ -12,6 +12,7 @@ class CustomAppBar{
   static AppBar fullAppBar(BuildContext context,{
     required List<Widget> actions,
     required String title,
+    VoidCallback? func,
   }) {
     return AppBar(
       backgroundColor: Colors.white,
@@ -23,7 +24,7 @@ class CustomAppBar{
         ),
       ),
       leading: IconButton(
-        onPressed: () {
+        onPressed: func ?? () {
           context.pop();
         },
         icon: Icon(
@@ -74,6 +75,7 @@ class CustomAppBar{
   // 왼쪽에 위치하는 아이콘은 기본적으로 뒤로가기 함수를 지원하는 아이콘을 넣었습니다.
   static AppBar noActionAppBar(BuildContext context,{
     required String title,
+    VoidCallback? func,
   }) {
     return AppBar(
       backgroundColor: Colors.white,
@@ -85,7 +87,7 @@ class CustomAppBar{
         ),
       ),
       leading: IconButton(
-        onPressed: () {
+        onPressed: func ?? () {
           context.pop();
         },
         icon: Icon(

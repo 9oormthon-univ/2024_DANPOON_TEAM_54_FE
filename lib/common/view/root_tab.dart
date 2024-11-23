@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
-import 'package:papar_plane/home/view/home_screen.dart';
+import 'package:papar_plane/post/view/home_screen.dart';
+import 'package:papar_plane/post/view/write_screen.dart';
+import 'package:papar_plane/user/view/mypage_screen.dart';
 
 // BottomNavigationBar 존재하는 화면
 class RootTab extends StatefulWidget {
@@ -49,15 +52,11 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: [
-          Center(
-            child: HomeScreen(),
-          ),
+          HomeScreen(),
           Center(
             child: Text("2"),
           ),
-          Center(
-            child: Text("3"),
-          ),
+          MyPageScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -71,6 +70,10 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         unselectedFontSize: 12,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
+          if(index == 1){
+            context.pushNamed(WriteScreen.routeName);
+            return;
+          }
           controller.animateTo(index);
         },
         currentIndex: index,
