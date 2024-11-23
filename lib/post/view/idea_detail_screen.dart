@@ -25,13 +25,15 @@ class IdeaDetailScreen extends ConsumerStatefulWidget {
   final int id;
   IdeaDetailScreen({
     required this.id,
-    super.key,});
+    super.key,
+  });
 
   @override
   ConsumerState<IdeaDetailScreen> createState() => _IdeaDetailScreenState();
 }
 
-class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen> with SingleTickerProviderStateMixin {
+class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _controller;
   List<String> tabcategory = ["상세정보", "후기", "문의하기"];
 
@@ -59,7 +61,9 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
   void initState() {
     _controller = TabController(length: 3, vsync: this);
     final userId = ref.read(userProvider.notifier).getUser().id;
-    ref.read(ideaDetailProvider.notifier).getDetail(id: widget.id, userId: userId);
+    ref
+        .read(ideaDetailProvider.notifier)
+        .getDetail(id: widget.id, userId: userId);
     ref.read(commentProvider.notifier).getComment(id: widget.id);
     ref.read(reviewProvider.notifier).getReview(id: widget.id);
     super.initState();
@@ -68,10 +72,15 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(ideaDetailProvider);
-    if(state is LoadingState){
-      return DefaultLayout(child: Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),));
+    if (state is LoadingState) {
+      return DefaultLayout(
+          child: Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
+        ),
+      ));
     }
-    if(state is ErrorState){
+    if (state is ErrorState) {
       return DefaultLayout(child: Center(child: Text(state.msg)));
     }
     final data = (state as IdeaDetail);
@@ -91,25 +100,32 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
               isBoder: false,
             ),
             TabBar(
-              labelStyle: PaperPlaneTS.free(fontSize: 16, fontWeight: FontWeight.w700),
-              unselectedLabelStyle: PaperPlaneTS.free(fontSize: 16, fontWeight: FontWeight.w700, color: PaperPlaneColor.greyColorA1),
-              dividerColor: PaperPlaneColor.greyColorA1,
-              // indicator style
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorWeight: 2,
-              dividerHeight: 2,
-              indicator: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: PaperPlaneColor.subColor8A, width: 2,),
+                labelStyle: PaperPlaneTS.free(
+                    fontSize: 16, fontWeight: FontWeight.w700),
+                unselectedLabelStyle: PaperPlaneTS.free(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: PaperPlaneColor.greyColorA1),
+                dividerColor: PaperPlaneColor.greyColorA1,
+                // indicator style
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorWeight: 2,
+                dividerHeight: 2,
+                indicator: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: PaperPlaneColor.subColor8A,
+                      width: 2,
+                    ),
+                  ),
+                  borderRadius: BorderRadius.circular(0),
                 ),
-                borderRadius: BorderRadius.circular(0),
-              ),
-              controller: _controller,
-              tabs: [
-              Tab(text: "상세정보"),
-              Tab(text: "후기"),
-              Tab(text: "문의하기"),
-            ]),
+                controller: _controller,
+                tabs: [
+                  Tab(text: "상세정보"),
+                  Tab(text: "후기"),
+                  Tab(text: "문의하기"),
+                ]),
             Expanded(
               child: TabBarView(
                 controller: _controller,
@@ -126,73 +142,89 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
     );
   }
 
-  Widget firstTabBarView(String text){
+  Widget firstTabBarView(String text) {
     return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Text(
-            text,
-            style: PaperPlaneTS.regular(fontSize: 16),
-          ),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: Text(
+          text,
+          style: PaperPlaneTS.regular(fontSize: 16),
         ),
-      );
+      ),
+    );
   }
 
-  Widget secondTabBarView(BaseState state){
-    if(state is LoadingState){
-      return DefaultLayout(child: Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),));
+  Widget secondTabBarView(BaseState state) {
+    if (state is LoadingState) {
+      return DefaultLayout(
+          child: Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
+        ),
+      ));
     }
-    if(state is ErrorState){
+    if (state is ErrorState) {
       return DefaultLayout(child: Center(child: Text(state.msg)));
     }
     final data = (state as CommentList).data;
     return Stack(
       children: [
         ListView.builder(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index) {
-              final review = data[index];
-              return commentBox(review.content,
-                  review.createdAt,
-                  "https://cdn.imweb.me/upload/S20210807d1f68b7a970c2/7170113c6a983.jpg",
-                  review.username,);
-            },
-          ),
-          Positioned(
-            right: 20,
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          itemCount: data.length,
+          itemBuilder: (BuildContext context, int index) {
+            final review = data[index];
+            return commentBox(
+              review.content,
+              review.createdAt,
+              "https://cdn.imweb.me/upload/S20210807d1f68b7a970c2/7170113c6a983.jpg",
+              review.username,
+            );
+          },
+        ),
+        Positioned(
+          right: 20,
           bottom: 50,
-            child: GestureDetector(
-              onTap: (){
-              _showDialog(controller: _commentController, hintText: "대댓글을 입력해주세요.",
-              func: (){
-                final userId = ref.read(userProvider.notifier).getUserId();
-                final comment = MakeComment(ideaId: widget.id, userId: userId);
-                final request = RequestComment(content: _commentController.text);
-                ref.read(commentProvider.notifier).comment(comment: comment, request: request);
-              });
+          child: GestureDetector(
+            onTap: () {
+              _showDialog(
+                  controller: _commentController,
+                  hintText: "대댓글을 입력해주세요.",
+                  func: () {
+                    final userId = ref.read(userProvider.notifier).getUserId();
+                    final comment =
+                        MakeComment(ideaId: widget.id, userId: userId);
+                    final request =
+                        RequestComment(content: _commentController.text);
+                    ref
+                        .read(commentProvider.notifier)
+                        .comment(comment: comment, request: request);
+                  });
             },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: PaperPlaneColor.mainColor,
-                  shape: BoxShape.circle
-                ),
-                padding: const EdgeInsets.all(10),
-                child: Image.asset(PaperPlaneImgPath.edit),
-              ),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: PaperPlaneColor.mainColor, shape: BoxShape.circle),
+              padding: const EdgeInsets.all(10),
+              child: Image.asset(PaperPlaneImgPath.edit),
             ),
-          )
+          ),
+        )
       ],
     );
   }
 
-  Widget thirdTabBarView(BaseState state){
-    if(state is LoadingState){
-      return DefaultLayout(child: Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),));
+  Widget thirdTabBarView(BaseState state) {
+    if (state is LoadingState) {
+      return DefaultLayout(
+          child: Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
+        ),
+      ));
     }
-    if(state is ErrorState){
+    if (state is ErrorState) {
       return DefaultLayout(child: Center(child: Text(state.msg)));
     }
     final data = (state as ReviewList).data;
@@ -203,22 +235,25 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
           right: 20,
           bottom: 50,
           child: GestureDetector(
-            onTap: (){
-              _showDialog(controller: _reviewController, hintText: "후기를 작성해주세요",
-              func: (){
-                final userId = ref.read(userProvider.notifier).getUserId();
-                final review = MakeReview(ideaId: widget.id, userId: userId, content: _reviewController.text);
-                ref.read(reviewProvider.notifier).review(review: review);
-              });
+            onTap: () {
+              _showDialog(
+                  controller: _reviewController,
+                  hintText: "후기를 작성해주세요",
+                  func: () {
+                    final userId = ref.read(userProvider.notifier).getUserId();
+                    final review = MakeReview(
+                        ideaId: widget.id,
+                        userId: userId,
+                        content: _reviewController.text);
+                    ref.read(reviewProvider.notifier).review(review: review);
+                  });
             },
             child: Container(
-                decoration: BoxDecoration(
-                  color: PaperPlaneColor.mainColor,
-                  shape: BoxShape.circle
-                ),
-                padding: const EdgeInsets.all(10),
-                child: Image.asset(PaperPlaneImgPath.chat),
-              ),
+              decoration: BoxDecoration(
+                  color: PaperPlaneColor.mainColor, shape: BoxShape.circle),
+              padding: const EdgeInsets.all(10),
+              child: Image.asset(PaperPlaneImgPath.chat),
+            ),
           ),
         )
       ],
@@ -387,42 +422,71 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
     required String hintText,
     required VoidCallback func,
   }) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Colors.white, // 배경색 흰색
-        contentPadding: EdgeInsets.zero, // Dialog 내부 여백 제거
-        content: Container(
-          width: MediaQuery.of(context).size.width * 0.9, // 화면 너비의 90%
-          padding: EdgeInsets.all(20), // 내부 여백 추가
-          child: Column(
-            mainAxisSize: MainAxisSize.min, // 세로 크기 최소화
-            children: [
-              CustomTextFormField(controller: controller, hintText: hintText, maxLines: 6,),
-            ],
-          ),
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Dialog 닫기
-                },
-                child: Text('취소'),
-              ),
-              TextButton(
-                onPressed: func,
-                child: Text('완료'),
-              ),
-            ],
-          ),
-        ],
-      );
-    },
-  );
-}
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          // 배경색 흰색
+          contentPadding: EdgeInsets.zero, // Dialog 내부 여백 제거
 
+          content: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: PaperPlaneColor.mainColor)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // 세로 크기 최소화
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: CustomTextFormField(
+                    controller: controller,
+                    hintText: hintText,
+                    maxLines: 6,
+                    borderRadius: 10,
+                    borderColor: Colors.white,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Dialog 닫기
+                      },
+                      child: buttonBox("취소", false),
+                    ),
+                    TextButton(
+                      onPressed: func,
+                      child: buttonBox("완료", true),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          backgroundColor: Colors.white,
+        );
+      },
+    );
+  }
+
+  Widget buttonBox(String text, bool isColor) {
+    return Container(
+      decoration: BoxDecoration(
+          color:
+              isColor ? PaperPlaneColor.mainColor : PaperPlaneColor.greyColorA1,
+          borderRadius: BorderRadius.circular(50)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: Text(
+          text,
+          style: PaperPlaneTS.medium(fontSize: 16, color: Colors.white),
+        ),
+      ),
+    );
+  }
 }

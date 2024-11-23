@@ -12,7 +12,6 @@ import 'package:papar_plane/user/view/signup_screen.dart';
 // 해당 provider로 routing 진행
 final goRouterProvider = Provider<GoRouter>(
   (ref) {
-
     final provider = ref.read(authProvider);
 
     // 라우팅 리스트
@@ -53,13 +52,12 @@ final goRouterProvider = Provider<GoRouter>(
     ];
 
     return GoRouter(
-      routes: routes,
-      // 처음으로 제공되는 화면 route
-      refreshListenable: provider,
-      initialLocation: '/login',
-      redirect: (_, state){
-        return provider.redirectLogic(state);
-      }
-    );
+        routes: routes,
+        // 처음으로 제공되는 화면 route
+        refreshListenable: provider,
+        initialLocation: '/login',
+        redirect: (_, state) {
+          return provider.redirectLogic(state);
+        });
   },
 );
