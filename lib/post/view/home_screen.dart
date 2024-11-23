@@ -36,10 +36,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(ideaCategoryProvider(getCategoryString(tabValue)));
-    if(state is LoadingState){
-      return Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),);
+    if (state is LoadingState) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
+        ),
+      );
     }
-    if(state is ErrorState){
+    if (state is ErrorState) {
       return Center(child: Text(state.msg));
     }
     final dataList = (state as IdeaModelList).data;
@@ -65,6 +69,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   point: data.price,
                   category: data.category,
                   date: data.createdAt,
+                  isOnTapDetialScreen: true,
                 );
               },
             ),
@@ -73,42 +78,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
-  
+
   // Search bar
-  Padding serachBar(){
+  Padding serachBar() {
     return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Image.asset(
-                  PaperPlaneImgPath.logo,
-                  width: 60,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: CustomTextFormField(
-                    isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    borderColor: PaperPlaneColor.mainColor,
-                    fillColor: Colors.white,
-                    controller: _controller,
-                    hintText: "",
-                  ),
-                ),
-                const SizedBox(width: 5),
-                GestureDetector(
-                  onTap: (){
-                    context.pushNamed(SignupScreen.routeName);
-                  },
-                  child: Icon(
-                    Icons.search,
-                    color: PaperPlaneColor.mainColor,
-                    size: 30,
-                  ),
-                )
-              ],
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        children: [
+          Image.asset(
+            PaperPlaneImgPath.logo,
+            width: 60,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: CustomTextFormField(
+              isDense: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              borderColor: PaperPlaneColor.mainColor,
+              fillColor: Colors.white,
+              controller: _controller,
+              hintText: "",
             ),
-          );
+          ),
+          const SizedBox(width: 5),
+          GestureDetector(
+            onTap: () {
+              context.pushNamed(SignupScreen.routeName);
+            },
+            child: Icon(
+              Icons.search,
+              color: PaperPlaneColor.mainColor,
+              size: 30,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   // TabBar

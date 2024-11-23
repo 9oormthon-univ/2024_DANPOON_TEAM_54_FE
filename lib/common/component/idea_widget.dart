@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/function.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
@@ -13,24 +14,29 @@ class IdeaWidget extends StatelessWidget {
   final String category;
   final DateTime date;
   final bool isBoder;
+  final bool isOnTapDetialScreen;
   const IdeaWidget({
-    required this.id,
+    Key? key,
     required this.title,
+    required this.id,
     required this.tags,
     required this.point,
     required this.category,
     required this.date,
     this.isBoder = true,
-    super.key,
-  });
+    required this.isOnTapDetialScreen,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final tagList = tags.split(',');
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         print("누르기");
-        context.pushNamed(IdeaDetailScreen.routeName, pathParameters: {"id" : (id).toString()});
+        if (isOnTapDetialScreen) {
+          context.pushNamed(IdeaDetailScreen.routeName,
+              pathParameters: {"id": (id).toString()});
+        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
