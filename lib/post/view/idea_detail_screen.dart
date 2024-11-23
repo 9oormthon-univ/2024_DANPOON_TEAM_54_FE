@@ -101,6 +101,7 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
               category: data.category,
               date: data.createdAt,
               isBoder: false,
+              isOnTapDetialScreen: false,
             ),
             TabBar(
                 labelStyle: PaperPlaneTS.free(

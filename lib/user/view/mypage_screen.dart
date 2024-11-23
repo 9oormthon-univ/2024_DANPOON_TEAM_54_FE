@@ -85,10 +85,14 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   // TabBarView에 나타나는 위젯 함수
   // 추후 변수로 넣는 data에 따라 달라지도록 구현할 예정
   Widget TabBarViewWidget(BaseState state) {
-    if(state is LoadingState){
-      return Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),);
+    if (state is LoadingState) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
+        ),
+      );
     }
-    if(state is ErrorState){
+    if (state is ErrorState) {
       return Center(child: Text(state.msg));
     }
     final dataList = (state as ItemList).data;
@@ -108,6 +112,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
               point: data.price,
               category: data.category,
               date: data.createdAt,
+              isOnTapDetialScreen: true,
             ),
           );
         }
@@ -122,17 +127,19 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
               point: data.price,
               category: data.category,
               date: data.createdAt,
+              isOnTapDetialScreen: true,
             ),
           );
         }
         return IdeaWidget(
-              id: data.id,
-              title: data.title,
-              tags: data.tags,
-              point: data.price,
-              category: data.category,
-              date: data.createdAt,
-            );
+          id: data.id,
+          title: data.title,
+          tags: data.tags,
+          point: data.price,
+          category: data.category,
+          date: data.createdAt,
+          isOnTapDetialScreen: true,
+        );
       },
     );
   }
