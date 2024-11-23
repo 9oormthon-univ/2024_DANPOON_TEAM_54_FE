@@ -45,11 +45,11 @@ class AuthNotifier extends ChangeNotifier {
       if (gState.fullPath == '/signup') {
         return '/signup';
       }
-      final isToken = await AuthApi.instance.hasToken();
-      if(isToken){
-        final kakaoData = await ref.read(authRepositoryProvider).getKakaoData();
-        ref.read(userProvider.notifier).serverLogin(kakaoData);
-      }
+      // final isToken = await AuthApi.instance.hasToken();
+      // if(isToken){
+      //   final kakaoData = await ref.read(authRepositoryProvider).getKakaoData();
+      //   ref.read(userProvider.notifier).serverLogin(kakaoData);
+      // }
       return isLoggin ? null : '/login';
     }
 

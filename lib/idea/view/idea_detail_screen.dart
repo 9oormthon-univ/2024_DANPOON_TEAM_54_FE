@@ -183,7 +183,9 @@ class _IdeaDetailScreenState extends ConsumerState<IdeaDetailScreen>
           return [
             PopupMenuItem(
               onTap: () async {
-                await ref.read(ideaProvider.notifier).delete(widget.id);
+                final userId = ref.read(userProvider.notifier).getUserId();
+                await ref.read(ideaProvider.notifier).delete(widget.id, userId);
+                ref.read(ideaProvider.notifier).getAllData();
                 context.goNamed(RootTab.routeName);
               },
               child: const Text("삭제하기"),

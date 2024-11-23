@@ -41,8 +41,8 @@ class IdeaNotifier extends StateNotifier<BaseState> {
   }
 
   // 삭제
-  Future<void> delete(int id) async {
-    await repo.delete(id: id);
+  Future<void> delete(int id, int userId) async {
+    await repo.delete(id: id, userId: userId);
   }
 
   // 모든 데이터 가져오기

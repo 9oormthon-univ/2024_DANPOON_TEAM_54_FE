@@ -124,10 +124,12 @@ class IdeaRepository {
     // 댓글 조회
   Future<void> delete({
     required int id,
+    required int userId,
   }) async {
     try{
-      final resp = await dio.get(
+      final resp = await dio.delete(
       baseUrl + '/$id',
+      queryParameters: {"userId" : userId},
     );
     }on DioException catch(e){
       print(e);
