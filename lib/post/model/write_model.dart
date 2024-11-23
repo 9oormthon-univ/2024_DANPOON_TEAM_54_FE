@@ -7,7 +7,6 @@ class WriteModel {
   final String description;
   final String tags;
   final int price;
-  final File? file;
 
   WriteModel({
     required this.title,
@@ -15,7 +14,6 @@ class WriteModel {
     required this.description,
     required this.tags,
     required this.price,
-    this.file,
   });
 
   // toJson 메서드

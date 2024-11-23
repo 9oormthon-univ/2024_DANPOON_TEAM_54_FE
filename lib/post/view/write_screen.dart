@@ -40,19 +40,14 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
   File? selectedFile;
 
   Future<void> pickFile() async {
-    // 파일 선택
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'ppt', 'pptx'], // 허용할 파일 확장자
-    );
+    print("before : ${selectedFile}");
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
-      setState(() {
-        selectedFile = File(result.files.single.path!);
-      });
+      selectedFile = File(result.files.single.path!);
+      print("after : ${selectedFile}");
     } else {
-      // 파일 선택 취소
-      print("File selection canceled");
+      // User canceled the picker
     }
   }
 
@@ -205,16 +200,14 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                   final userId = ref.read(userProvider.notifier).getUserId();
                   final model = WriteModel(
                     title: _titleController.text,
-                    categoryDisplayName: categoryValues.join(', '),
+                    categoryDisplayName: "기타",
                     description: _descriptionController.text,
                     tags: _tagController.text,
                     price: int.parse(_pointController.text),
-                    file: selectedFile,
                   );
                   print("작성하기");
-                  await ref
-                      .read(ideaProvider.notifier)
-                      .write(model: model, userId: userId);
+                  print(model.toJson());
+                  await ref.read(ideaProvider.notifier).write(model: model, userId: userId, file: selectedFile);
                 },
                 borderRadius: 20,
                 horizontalMargin: 0,

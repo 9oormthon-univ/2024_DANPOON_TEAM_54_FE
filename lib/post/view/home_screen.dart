@@ -12,8 +12,9 @@ import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'package:papar_plane/post/model/idea_model.dart';
 import 'package:papar_plane/post/provider/idea_provider.dart';
-import 'package:papar_plane/post/view/idea_detail_screen.dart';
 import 'package:papar_plane/user/view/signup_screen.dart';
+
+final searchQueryProvider = StateProvider<String>((ref) => '');
 
 class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
@@ -47,11 +48,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return Center(child: Text(state.msg));
     }
     final dataList = (state as IdeaModelList).data;
+    final String searchQuery = ref.watch(searchQueryProvider);
+    List<IdeaModel> filteredList = dataList.where((idea) {
+      return idea.title.contains(searchQuery);
+    }).toList();
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          serachBar(),
+          searchBar(),
           const SizedBox(height: 10),
           customTabBar(),
           const Divider(),
@@ -59,9 +64,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: ListView.builder(
               padding: const EdgeInsets.only(top: 10),
               shrinkWrap: true,
-              itemCount: dataList.length,
+              itemCount: filteredList.length,
               itemBuilder: (context, index) {
-                final data = dataList[index];
+                final data = filteredList[index];
                 return IdeaWidget(
                   id: data.id,
                   title: data.title,
@@ -80,25 +85,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // Search bar
-  Padding serachBar() {
+  Padding searchBar(){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Image.asset(
-            PaperPlaneImgPath.logo,
-            width: 60,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: CustomTextFormField(
-              isDense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              borderColor: PaperPlaneColor.mainColor,
-              fillColor: Colors.white,
-              controller: _controller,
-              hintText: "",
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Image.asset(
+                  PaperPlaneImgPath.logo,
+                  width: 60,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: CustomTextFormField(
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    borderColor: PaperPlaneColor.mainColor,
+                    fillColor: Colors.white,
+                    controller: _controller,
+                    hintText: "",
+                    onChanged: (val){
+                      ref.read(searchQueryProvider.notifier).state = val;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Icon(
+                  Icons.search,
+                  color: PaperPlaneColor.mainColor,
+                  size: 30,
+                )
+              ],
             ),
           ),
           const SizedBox(width: 5),

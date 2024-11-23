@@ -2,16 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/user/repository/user_repository.dart';
 
-final myIdeaProvider = StateNotifierProvider<MyIdeaNotifier, BaseState>((ref) {
+final userIdeaProvider = StateNotifierProvider<UserIdeaNotifier, BaseState>((ref) {
   final repo = ref.watch(userRepositoryProvider);
 
-  return MyIdeaNotifier(repo: repo);
+  return UserIdeaNotifier(repo: repo);
 });
 
-class MyIdeaNotifier extends StateNotifier<BaseState> {
+class UserIdeaNotifier extends StateNotifier<BaseState> {
   final UserRepository repo;
   
-  MyIdeaNotifier({
+  UserIdeaNotifier({
     required this.repo,
   }):super(LoadingState());
 
