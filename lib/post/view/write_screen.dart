@@ -212,7 +212,9 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                     file: selectedFile,
                   );
                   print("작성하기");
-                  await ref.read(ideaProvider.notifier).write(model: model, userId: userId);
+                  await ref
+                      .read(ideaProvider.notifier)
+                      .write(model: model, userId: userId);
                 },
                 borderRadius: 20,
                 horizontalMargin: 0,
@@ -236,7 +238,8 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
   Text subTitleText(String text) {
     return Text(
       text,
-      style: PaperPlaneTS.regular(fontSize: 14, color: PaperPlaneColor.subColor8A),
+      style:
+          PaperPlaneTS.regular(fontSize: 14, color: PaperPlaneColor.subColor8A),
     );
   }
 
@@ -249,7 +252,7 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
             categoryValues.remove(text);
             return;
           }
-          if (categoryValues.length == 3) {
+          if (categoryValues.length == 1) {
             return;
           }
           categoryValues.add(text);
