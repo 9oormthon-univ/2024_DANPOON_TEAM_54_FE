@@ -231,7 +231,8 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
   Text subTitleText(String text) {
     return Text(
       text,
-      style: PaperPlaneTS.regular(fontSize: 14, color: PaperPlaneColor.subColor8A),
+      style:
+          PaperPlaneTS.regular(fontSize: 14, color: PaperPlaneColor.subColor8A),
     );
   }
 
@@ -244,7 +245,7 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
             categoryValues.remove(text);
             return;
           }
-          if (categoryValues.length == 3) {
+          if (categoryValues.length == 1) {
             return;
           }
           categoryValues.add(text);

@@ -37,10 +37,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(ideaCategoryProvider(getCategoryString(tabValue)));
-    if(state is LoadingState){
-      return Center(child: CircularProgressIndicator(color: PaperPlaneColor.mainColor,),);
+    if (state is LoadingState) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: PaperPlaneColor.mainColor,
+        ),
+      );
     }
-    if(state is ErrorState){
+    if (state is ErrorState) {
       return Center(child: Text(state.msg));
     }
     final dataList = (state as IdeaModelList).data;
@@ -70,6 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   point: data.price,
                   category: data.category,
                   date: data.createdAt,
+                  isOnTapDetialScreen: true,
                 );
               },
             ),
@@ -78,7 +83,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
-  
+
   // Search bar
   Padding searchBar(){
     return Padding(
@@ -111,7 +116,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 )
               ],
             ),
-          );
+          ),
+          const SizedBox(width: 5),
+          GestureDetector(
+            onTap: () {
+              context.pushNamed(SignupScreen.routeName);
+            },
+            child: Icon(
+              Icons.search,
+              color: PaperPlaneColor.mainColor,
+              size: 30,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   // TabBar
