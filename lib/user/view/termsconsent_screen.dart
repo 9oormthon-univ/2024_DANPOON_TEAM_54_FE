@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/component/appbar.dart';
 import 'package:papar_plane/common/component/button.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
 import 'package:papar_plane/main.dart';
+import 'package:papar_plane/user/view/signup_screen.dart';
 
 class TermsConsentScreen extends StatefulWidget {
+  static String get routeName => "terms";
   TermsConsentScreen({super.key});
 
   @override
@@ -23,7 +26,7 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      appBar: CustomAppBar.noActionAppBar(context, title: "회원가입"),
+      appBar: CustomAppBar.noAppBar(context, title: "회원가입"),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -169,7 +172,9 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
               text: "시작하기",
               bgColor: PaperPlaneColor.mainColor,
               borderColor: isAllCheck ? null : PaperPlaneColor.greyColorD3,
-              func: isAllCheck ? null : null,
+              func: isAllCheck ? (){
+                context.pushNamed(SignupScreen.routeName);
+              } : null,
               disabledBackgroundColor: isAllCheck
                   ? PaperPlaneColor.mainColor
                   : PaperPlaneColor.greyColorD3,

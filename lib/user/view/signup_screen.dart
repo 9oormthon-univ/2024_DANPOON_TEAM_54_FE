@@ -9,10 +9,8 @@ import 'package:papar_plane/common/component/textformfield.dart';
 import 'package:papar_plane/common/layout/default_layout.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
-import 'package:papar_plane/common/view/root_tab.dart';
 import 'package:papar_plane/main.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
-import 'package:papar_plane/user/repository/user_repository.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   static String get routeName => "signup";

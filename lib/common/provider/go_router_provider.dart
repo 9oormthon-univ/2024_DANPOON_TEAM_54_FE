@@ -8,6 +8,7 @@ import 'package:papar_plane/user/provider/auth_provider.dart';
 import 'package:papar_plane/user/view/login_screen.dart';
 import 'package:papar_plane/user/view/profile_screen.dart';
 import 'package:papar_plane/user/view/signup_screen.dart';
+import 'package:papar_plane/user/view/termsconsent_screen.dart';
 
 // GoRouter Provider
 // 해당 provider로 routing 진행
@@ -35,9 +36,16 @@ final goRouterProvider = Provider<GoRouter>(
         ]
       ),
       GoRoute(
-        path: '/signup',
-        name: SignupScreen.routeName,
-        builder: (_, __) => SignupScreen(),
+        path: '/terms',
+        name: TermsConsentScreen.routeName,
+        builder: (_, __) => TermsConsentScreen(),
+        routes: [
+          GoRoute(
+            path: 'signup',
+            name: SignupScreen.routeName,
+            builder: (_, __) => SignupScreen(),
+          ),
+        ]
       ),
       GoRoute(
         path: '/login',

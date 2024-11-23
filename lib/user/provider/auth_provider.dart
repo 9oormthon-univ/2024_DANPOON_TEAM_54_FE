@@ -30,13 +30,14 @@ class AuthNotifier extends ChangeNotifier {
   // 홈 스크린으로 보내줄지 확인하는 과정
   Future<String?> redirectLogic(GoRouterState gState) async {
     print('redirect 실행');
+    print(gState.fullPath);
     final user = ref.read(userProvider);
     // 현재 넘어가는 화면에 따른 변수 설정
     // 로그인 / 회원가입 / 개인 정보 동의
     final isLoggin = gState.fullPath == '/login';
-    final isSignup = gState.fullPath == '/signup';
+    final isSignup = gState.fullPath == '/terms/signup';
     final isLoading = gState.fullPath == '/loading';
-    //final isPolicy = gState.fullPath == '/policy';
+    final isTerms = gState.fullPath == '/terms';
 
     // 유저 정보가 없고 로그인 중이라면
     // 로그인 화면로 이동
@@ -60,7 +61,7 @@ class AuthNotifier extends ChangeNotifier {
     // 만약 유저가 앱내에서 회원가입이 진행되지 않은 회원이라면
     // 회원가입 화면으로 이동
     if (user is SignupUser) {
-      return isSignup ? null : '/signup';
+      return (isSignup || isTerms) ? null : '/terms';
       // return isPolicy || isSignup ? null : '/policy';
     }
 
