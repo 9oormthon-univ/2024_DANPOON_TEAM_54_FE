@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
@@ -70,6 +74,7 @@ class IdeaRepository {
   // 글 작성
   Future<IdeaDetail?> write({
     required FormData formData,
+    File? file,
     required int userId,
   }) async {
     try{
@@ -87,10 +92,12 @@ class IdeaRepository {
     print("resp.statusCode : ${resp.statusCode}");
     print("resp.data : ${resp.data}");
     return IdeaDetail.fromJson(resp.data);
-    }on DioException catch(e){
+    } on DioException catch(e){
       print(e.message);
       print(e.response);
-      print(e);
+      print(e.error);
+      print(e.requestOptions.data);
+      print(e.type);
       return null;
     }
   }
@@ -128,6 +135,22 @@ class IdeaRepository {
     return CommentModel.fromJson(resp.data);
     }on DioException catch(e){
       return null;
+    }
+  }
+
+    // 댓글 조회
+  Future<void> delete({
+    required int id,
+  }) async {
+    try{
+      final resp = await dio.get(
+      baseUrl + '/$id',
+    );
+    print(resp.statusCode);
+    print(resp.data);
+    
+    }on DioException catch(e){
+      print(e);
     }
   }
 }

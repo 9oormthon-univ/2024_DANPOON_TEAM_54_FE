@@ -6,6 +6,7 @@ import 'package:papar_plane/post/view/idea_detail_screen.dart';
 import 'package:papar_plane/post/view/write_screen.dart';
 import 'package:papar_plane/user/provider/auth_provider.dart';
 import 'package:papar_plane/user/view/login_screen.dart';
+import 'package:papar_plane/user/view/profile_screen.dart';
 import 'package:papar_plane/user/view/signup_screen.dart';
 
 // GoRouter Provider
@@ -48,6 +49,14 @@ final goRouterProvider = Provider<GoRouter>(
         builder: (_, __) {
           final id = int.parse(__.pathParameters["id"]!);
           return IdeaDetailScreen(id: id);
+        },
+      ),
+      GoRoute(
+        path: '/profile',
+        name: ProfileScreen.routeName,
+        builder: (_, __) {
+          final username = __.uri.queryParameters["username"]!;
+          return ProfileScreen(username: username);
         },
       ),
     ];

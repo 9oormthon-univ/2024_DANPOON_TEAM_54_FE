@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:papar_plane/common/model/state_model.dart';
@@ -37,20 +39,32 @@ class IdeaNotifier extends StateNotifier<BaseState> {
     state = resp;
   }
 
+  // 삭제
+  Future<void> delete(int id) async {
+    await repo.delete(id: id);
+  }
+
   // 모든 데이터 가져오기
   Future<void> write({
     required WriteModel model,
     required int userId,
+    File? file,
   }) async {
+    print("now user id : ${userId}");
+    print("before formData = ${model.toJson()}");
+    MultipartFile? fileData;
+    if(file != null){
+      fileData = await MultipartFile.fromFile(
+        file.path, 
+        filename: file.path.split('/').last,
+      );
+    }
     // FormData 생성: JSON 데이터와 파일 포함
     final formData = FormData.fromMap({
-      ...model.toJson(), // JSON 데이터를 추가
-      if (model.file != null) // 파일이 있을 경우만 추가
-        "file": await MultipartFile.fromFile(
-          model.file!.path,
-          filename: model.file!.path.split('/').last,
-        ),
+      ...model.toJson(),
+      //"file": fileData,
     });
+    print("formData.fields : ${formData.fields}");
     final resp = await repo.write(formData: formData, userId: userId);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:papar_plane/common/component/appbar.dart';
 import 'package:papar_plane/common/component/button.dart';
 import 'package:papar_plane/common/component/dialog.dart';
@@ -13,14 +14,17 @@ import 'package:papar_plane/common/model/state_model.dart';
 import 'package:papar_plane/common/variable/colors.dart';
 import 'package:papar_plane/common/variable/image_path.dart';
 import 'package:papar_plane/common/variable/textstyle.dart';
+import 'package:papar_plane/common/view/root_tab.dart';
 import 'package:papar_plane/post/model/comment_model.dart';
 import 'package:papar_plane/post/model/idea_model.dart';
 import 'package:papar_plane/post/model/review_model.dart';
 import 'package:papar_plane/post/provider/comment_provider.dart';
 import 'package:papar_plane/post/provider/idea_detail_provider.dart';
+import 'package:papar_plane/post/provider/idea_provider.dart';
 import 'package:papar_plane/post/provider/review_provider.dart';
 import 'package:papar_plane/user/component/user_image.dart';
 import 'package:papar_plane/user/provider/user_provider.dart';
+import 'package:papar_plane/user/view/profile_screen.dart';
 
 class IdeaDetailScreen extends ConsumerStatefulWidget {
   static String get routeName => "detail";
@@ -63,9 +67,7 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
   void initState() {
     _controller = TabController(length: 3, vsync: this);
     final userId = ref.read(userProvider.notifier).getUser().id;
-    ref
-        .read(ideaDetailProvider.notifier)
-        .getDetail(id: widget.id, userId: userId);
+    ref.read(ideaDetailProvider.notifier).getDetail(id: widget.id, userId: userId);
     ref.read(commentProvider.notifier).getComment(id: widget.id);
     ref.read(reviewProvider.notifier).getReview(id: widget.id);
     super.initState();
@@ -89,7 +91,9 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
     final reviewState = ref.watch(reviewProvider);
     final commentState = ref.watch(commentProvider);
     return DefaultLayout(
-      appBar: CustomAppBar.fullAppBar(context, actions: [], title: "게시물 상세보기"),
+      appBar: CustomAppBar.fullAppBar(context, actions: [
+        actionWidget(state.status)
+      ], title: "게시물 상세보기"),
       child: SafeArea(
         child: Column(
           children: [
@@ -101,6 +105,26 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
               category: data.category,
               date: data.createdAt,
               isBoder: false,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              decoration: BoxDecoration(
+                color: PaperPlaneColor.greyColorF6,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  const UserImage(size: 40),
+                  const SizedBox(width: 5),
+                  Expanded(child: Text(data.author, style: PaperPlaneTS.medium(fontSize: 16, color: PaperPlaneColor.greyColor66),)),
+                  GestureDetector(
+                    onTap: (){
+                      context.pushNamed(ProfileScreen.routeName, queryParameters: {"username" : data.author});
+                    },
+                    child: Icon(Icons.arrow_forward_ios, color: PaperPlaneColor.greyColorA1,))
+                ],
+              ),
             ),
             TabBar(
                 labelStyle: PaperPlaneTS.free(
@@ -146,6 +170,32 @@ A+ 평가를 받았던 과목이므로, 과제할때 참고하시면 많은 도�
         ),
       ),
     );
+  }
+
+  Widget actionWidget(String status){
+    if(status == "OWN"){
+      return PopupMenuButton(
+          color: Colors.white,
+          itemBuilder: (context){
+          return [
+            PopupMenuItem(
+              onTap: () async {
+                await ref.read(ideaProvider.notifier).delete(widget.id);
+                context.goNamed(RootTab.routeName);
+              },
+              child: Text("삭제하기"),
+            ),
+            PopupMenuItem(
+              onTap: (){
+
+              },
+              child: Text("수정하기"),
+            ),
+          ];
+        },
+        );
+    }
+    return SizedBox();
   }
 
   Widget firstTabBarView({

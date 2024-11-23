@@ -28,6 +28,7 @@ class UserRepository {
       baseUrl + '/users/kakao',
       data: data.toJson(),
     );
+    print("server login : ${resp.data}");
 
     return LoginModel.fromJson(resp.data);
     }on DioException catch(e){
